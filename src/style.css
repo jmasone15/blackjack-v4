@@ -1,0 +1,169 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #2e7d32;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1b5e20;
+  padding: 5px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-title {
+  margin: 10px;
+  font-size: 24px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+  margin: 10px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.nav-active {
+  text-decoration: underline !important;
+  font-weight: bold;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.cards-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.player-hands {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  width: 100%;
+}
+
+.spacer {
+  height: 20vh;
+}
+
+.hand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 120px;
+}
+
+.card {
+  width: 60px;
+  height: 85px;
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.card-black {
+  color: black;
+}
+
+.card-red {
+  color: red;
+}
+
+.buttons {
+  position: fixed;
+  bottom: 0;
+  padding: 10px;
+  display: flex;
+  gap: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  justify-content: center;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+
+.total {
+  font-weight: bold;
+  border: 1px solid white;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 8px;
+}
+
+.hit {
+  background-color: rgb(16, 212, 42);
+}
+
+.double {
+  background-color: #ff9800;
+}
+
+.stand {
+  background-color: #d32f2f;
+}
+
+.split {
+  background-color: #1976d2;
+}
+
+@media (max-height: 800px) {
+  .spacer {
+    height: 0;
+  }
+
+  .total {
+    margin: 5px;
+  }
+}
+
+@media (max-width: 750px) {
+  .card {
+    width: 50px;
+    height: 75px;
+  }
+
+  .buttons {
+    gap: 10px;
+  }
+
+  .nav-links {
+    gap: 10px;
+  }
+}
