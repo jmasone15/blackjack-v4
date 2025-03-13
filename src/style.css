@@ -10,6 +10,10 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.d-none {
+  display: none !important;
+}
+
 nav {
   position: fixed;
   top: 0;
@@ -42,6 +46,29 @@ nav {
 .nav-active {
   text-decoration: underline !important;
   font-weight: bold;
+}
+
+.pre-game h1,
+h3 {
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  font-weight: 100;
+}
+
+.pre-game h1 {
+  margin-bottom: 10px;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.pre-game h3 {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+#start-btn {
+  background-color: rgb(61, 61, 61);
+  font-size: 20px;
 }
 
 .game-container {
