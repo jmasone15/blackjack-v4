@@ -6,12 +6,14 @@ class DOMElements {
 	pregameDiv = document.getElementById('pregame-section') as HTMLDivElement;
 	dealerDiv = document.getElementById('dealer-section') as HTMLDivElement;
 	playerDiv = document.getElementById('player-section') as HTMLDivElement;
+	playerHandsDiv = document.getElementById('player-hands') as HTMLDivElement;
+	buttonsDiv = document.getElementById('buttons') as HTMLDivElement;
 
 	constructor() {
-		console.log('DOM Elements ready');
+		console.log('DOM Elements Class ready');
 	}
 
-	showElement(element: HTMLElement, classText: string): void {
+	showElement(element: HTMLElement, classText: string = ''): void {
 		element.setAttribute('class', classText);
 		return;
 	}

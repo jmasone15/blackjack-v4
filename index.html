@@ -10,7 +10,9 @@
 
 <body>
   <nav>
-    <h1 class="nav-title">Blackjack</h1>
+    <h1 class="nav-title">
+      <a href="/">Blackjack</a>
+    </h1>
     <div class="nav-links">
       <a href="/" class="nav-active">Home</a>
       <a href="#">Leaderboard</a>
@@ -25,55 +27,16 @@
     </div>
     <section class="d-none" id="dealer-section">
       <h2>Dealer</h2>
-      <div class="hand" id="dealer-hand">
-        <div class="cards-container">
-          <div class="card card-black">?</div>
-          <div class="card card-black">?</div>
-          <div class="card card-black">?</div>
-          <div class="card card-black">?</div>
-          <div class="card card-black">?</div>
-          <div class="card card-black">?</div>
-        </div>
-        <p class="total">21</p>
-      </div>
     </section>
     <div class="spacer"></div>
     <section class="d-none" id="player-section">
       <h2>Player</h2>
-      <div class="player-hands">
-        <div class="hand" id="hand-1">
-          <div class="cards-container" id="player-cards-1">
-            <div class="card card-black">A♠</div>
-            <div class="card card-red">10♦</div>
-          </div>
-          <p class="total">21</p>
-        </div>
-        <div class="hand" id="hand-2">
-          <div class="cards-container" id="player-cards-2">
-            <div class="card card-black">A♠</div>
-            <div class="card card-red">10♦</div>
-          </div>
-          <p class="total">21</p>
-        </div>
-        <div class="hand" id="hand-3">
-          <div class="cards-container" id="player-cards-3">
-            <div class="card card-black">A♠</div>
-            <div class="card card-red">10♦</div>
-          </div>
-          <p class="total">21</p>
-        </div>
-        <div class="hand" id="hand-4">
-          <div class="cards-container" id="player-cards-4">
-            <div class="card card-black">A♠</div>
-            <div class="card card-red">10♦</div>
-          </div>
-          <p class="total">21</p>
-        </div>
+      <div class="player-hands" id="player-hands">
       </div>
     </section>
   </div>
 
-  <div class="buttons d-none">
+  <div id="buttons" class="d-none">
     <button class="hit">Hit</button>
     <button class="stand">Stand</button>
     <button class="split">Split</button>

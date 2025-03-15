@@ -37,9 +37,12 @@ nav {
   margin: 10px;
 }
 
-.nav-links a {
+a {
   color: white;
   text-decoration: none;
+}
+
+.nav-links a {
   font-size: 16px;
 }
 
@@ -85,6 +88,9 @@ h3 {
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .player-hands {
@@ -123,6 +129,10 @@ h3 {
 
 .card-red {
   color: red;
+}
+
+.face-down {
+  background-color: lightgrey;
 }
 
 .buttons {
