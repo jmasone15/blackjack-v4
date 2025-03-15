@@ -164,20 +164,29 @@ button {
   padding: 5px 8px;
 }
 
-.hit {
+.disabled {
+  background-color: grey !important;
+  cursor: not-allowed !important;
+}
+
+#hit {
   background-color: rgb(16, 212, 42);
 }
 
-.double {
+#double {
   background-color: #ff9800;
 }
 
-.stand {
+#stand {
   background-color: #d32f2f;
 }
 
-.split {
+#split {
   background-color: #1976d2;
+}
+
+.button:hover {
+  filter: brightness(1.2);
 }
 
 @media (max-height: 800px) {

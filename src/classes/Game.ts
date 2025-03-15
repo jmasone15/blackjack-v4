@@ -2,6 +2,7 @@ import domElements from '../utils/domElements';
 import delay from '../utils/delay';
 import Card from '../classes/Card';
 import Hand from './Hand';
+import ActionButton from './ActionButton';
 
 // DOM Elements
 const {
@@ -27,9 +28,28 @@ export default class Game {
 	playerHands: Hand[] = [];
 	playerHandCurrentIdx: number = 0;
 
+	// Action Buttons
+	hitButton: ActionButton;
+	standButton: ActionButton;
+	splitButton: ActionButton;
+	doubleButton: ActionButton;
+	actionButtonsArray: ActionButton[];
+
 	constructor() {
 		// Create & Shuffle Deck
 		this.createDeck();
+
+		// Action Buttons
+		this.hitButton = new ActionButton('hit', this.hit);
+		this.standButton = new ActionButton('stand', this.stand);
+		this.splitButton = new ActionButton('split', this.split);
+		this.doubleButton = new ActionButton('double', this.double);
+		this.actionButtonsArray = [
+			this.hitButton,
+			this.standButton,
+			this.splitButton,
+			this.doubleButton
+		];
 
 		// Event Listeners
 		startBtn.addEventListener('click', (e: Event) => {
@@ -56,6 +76,14 @@ export default class Game {
 		for (let i = 0; i < 4; i++) {
 			await delay(500);
 			this.deal(i % 2 !== 0, i == 3);
+		}
+
+		// Pause after deal
+		await delay(500);
+
+		// Enable Action Buttons
+		for (const button of this.actionButtonsArray) {
+			button.enableButton();
 		}
 	}
 
@@ -100,5 +128,21 @@ export default class Game {
 
 		// Increment Deck
 		this.currentDeckIdx++;
+	}
+
+	hit() {
+		console.log('hit me!');
+	}
+
+	stand() {
+		console.log('stand');
+	}
+
+	split() {
+		console.log('split');
+	}
+
+	double() {
+		console.log('double');
 	}
 }
