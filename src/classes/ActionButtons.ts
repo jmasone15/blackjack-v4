@@ -24,7 +24,9 @@ export default class ActionButtons {
 		for (const button in this) {
 			if (Object.prototype.hasOwnProperty.call(this, button)) {
 				const actionButton = this[button] as ActionButton;
-				actionButton.enableButton();
+				if (!actionButton.permanentDisable) {
+					actionButton.enableButton();
+				}
 			}
 		}
 	}
@@ -43,6 +45,15 @@ export default class ActionButtons {
 			if (Object.prototype.hasOwnProperty.call(this, button)) {
 				const actionButton = this[button] as ActionButton;
 				actionButton.hideButton();
+			}
+		}
+	}
+
+	permanentEnableActionButtons() {
+		for (const button in this) {
+			if (Object.prototype.hasOwnProperty.call(this, button)) {
+				const actionButton = this[button] as ActionButton;
+				actionButton.permanentDisable = false;
 			}
 		}
 	}

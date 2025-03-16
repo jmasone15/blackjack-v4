@@ -49,13 +49,21 @@ export default class Hand {
 		}
 	}
 
-	get isTurnOver() {
+	get isTurnOver(): boolean {
 		return this.total > 20;
 	}
 
 	// Dealer will hit until 17 or more.
-	get shouldDealerHit() {
+	get shouldDealerHit(): boolean {
 		return this.total < 17;
+	}
+
+	get canHandSplit(): boolean {
+		// return (
+		// 	this.cards.length == 2 &&
+		// 	this.cards[0].gameValue == this.cards[1].gameValue
+		// );
+		return true;
 	}
 
 	// Highlight the total in the case of split hands
@@ -85,6 +93,23 @@ export default class Hand {
 		}
 
 		this.calculateTotal();
+	}
+
+	removeCardForSplit(): any {
+		if (!this.canHandSplit) {
+			return;
+		}
+
+		// Create a second instance in memory
+		const cardToRemove = this.cards[1];
+
+		// Remove from this hand UI & Update cards array
+		this.cardsContainerElement.lastChild?.remove();
+		this.cards = [this.cards[0]];
+		this.calculateTotal();
+
+		// Return so Game class can access
+		return cardToRemove;
 	}
 
 	calculateTotal(showMaxTotal: boolean = false) {

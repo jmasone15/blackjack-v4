@@ -16,6 +16,14 @@ export default class Card {
 		this.isDoubleCard = false;
 	}
 
+	get gameValue(): number {
+		if (this.value > 9 && this.value < 14) {
+			return 10;
+		} else {
+			return this.value;
+		}
+	}
+
 	generateCardFace() {
 		if (!this.domElement) {
 			return;

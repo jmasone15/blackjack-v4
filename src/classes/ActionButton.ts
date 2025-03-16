@@ -4,6 +4,7 @@ const { showElement, hideElement } = domElements;
 
 export default class ActionButton {
 	domElement: HTMLButtonElement;
+	permanentDisable: boolean;
 
 	// Action Buttons start disabled in HTML by default.
 	constructor(id: string, actionFunc: Function) {
@@ -18,6 +19,8 @@ export default class ActionButton {
 				return console.log('Button Disabled');
 			}
 		});
+
+		this.permanentDisable = false;
 	}
 
 	enableButton() {

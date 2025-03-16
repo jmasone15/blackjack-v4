@@ -80,6 +80,10 @@ export default class Game {
 		console.log('Game Class ready');
 	}
 
+	get currentHand(): Hand {
+		return this.playerHands[this.playerHandCurrentIdx];
+	}
+
 	async startRound() {
 		// Disable Action Buttons
 		this.actionButtons.disableUserAction();
@@ -102,18 +106,23 @@ export default class Game {
 			await this.deal(i % 2 !== 0, i == 3);
 		}
 
+		// Enable or Disable Split
+		if (!this.currentHand.canHandSplit) {
+			this.actionButtons.splitButton.permanentDisable = true;
+		}
+
 		// Pause after deal
 		await delay(500);
 
 		// Immediate Blackjack
 		if (this.dealerHand.isTurnOver) {
 			return this.endRound();
-		} else if (this.playerHands[this.playerHandCurrentIdx].isTurnOver) {
+		} else if (this.currentHand.isTurnOver) {
 			return this.dealerTurn();
 		}
 
-		// Activate user Hand
-		this.playerHands[this.playerHandCurrentIdx].active = true;
+		// Activate User Hand
+		this.currentHand.active = true;
 
 		// Enable Action Buttons
 		this.actionButtons.enableUserAction();
@@ -147,7 +156,8 @@ export default class Game {
 	async deal(
 		toDealer: boolean,
 		isFaceDown: boolean,
-		isDouble: boolean = false
+		isDouble: boolean = false,
+		targetHandOverride?: Hand
 	) {
 		await delay(250);
 
@@ -156,10 +166,12 @@ export default class Game {
 		let targetCard = this.currentDeck[this.currentDeckIdx];
 
 		// Determine which Hand to deal to
-		if (toDealer && this.dealerHand !== undefined) {
+		if (targetHandOverride) {
+			targetHand = targetHandOverride;
+		} else if (toDealer && this.dealerHand !== undefined) {
 			targetHand = this.dealerHand;
 		} else {
-			targetHand = this.playerHands[this.playerHandCurrentIdx];
+			targetHand = this.currentHand;
 		}
 
 		// Set Card Properties and Deal
@@ -177,8 +189,12 @@ export default class Game {
 
 		await this.deal(false, false);
 
-		if (this.playerHands[this.playerHandCurrentIdx].isTurnOver) {
-			return this.dealerTurn();
+		if (this.currentHand.isTurnOver) {
+			return this.endPlayerTurn();
+		} else {
+			// Can no longer double or split after hitting
+			this.actionButtons.doubleButton.permanentDisable = true;
+			this.actionButtons.splitButton.permanentDisable = true;
 		}
 
 		return this.actionButtons.enableUserAction();
@@ -186,23 +202,70 @@ export default class Game {
 
 	stand = () => {
 		this.actionButtons.disableUserAction();
-		return this.dealerTurn();
+		return this.endPlayerTurn();
 	};
 
-	split = () => {
-		console.log('split');
+	split = async () => {
+		this.actionButtons.disableUserAction();
+
+		// Remove second card from original hand and update UI
+		const splitCard = this.currentHand.removeCardForSplit();
+		const newHand = new Hand(this.playerHands.length + 1);
+
+		// Create new Hand and add splitCard
+		this.playerHands.push(newHand);
+		newHand.deal(splitCard, false);
+
+		// Pause
+		await delay(500);
+
+		// Deal one more card to each hand
+		await this.deal(false, false);
+		await this.deal(false, false, false, newHand);
+
+		if (this.playerHands.length > 3) {
+			this.actionButtons.splitButton.permanentDisable = true;
+		}
+
+		return this.actionButtons.enableUserAction();
 	};
 
 	double = async () => {
-		this.playerHands[this.playerHandCurrentIdx].double = true;
+		this.actionButtons.disableUserAction();
+		this.currentHand.double = true;
+
 		await this.deal(false, true, true);
 		await delay(500);
-		return this.dealerTurn();
+
+		return this.endPlayerTurn();
 	};
+
+	endPlayerTurn() {
+		// If no more hands for the player, move on to dealer
+		if (this.playerHands.length == this.playerHandCurrentIdx + 1) {
+			return this.dealerTurn();
+		}
+
+		// Update which hand is active on UI
+		this.currentHand.active = false;
+		this.playerHands[this.playerHandCurrentIdx + 1].active = true;
+		this.playerHandCurrentIdx++;
+
+		// Enable User Action
+		this.actionButtons.permanentEnableActionButtons();
+		this.actionButtons.enableUserAction();
+
+		// Disable Split for new Hand if necessary
+		if (this.playerHands.length > 3) {
+			this.actionButtons.splitButton.permanentDisable = true;
+		}
+
+		return;
+	}
 
 	async dealerTurn() {
 		// Deactivate user hand
-		this.playerHands[this.playerHandCurrentIdx].active = false;
+		this.currentHand.active = false;
 
 		// Show flipped cards and total
 		this.dealerHand?.showHandAndTotal();
@@ -286,6 +349,9 @@ export default class Game {
 		// Clear stale Game data
 		this.dealerHand = undefined;
 		this.playerHands = [];
+
+		// Reset Action Buttons
+		this.actionButtons.permanentEnableActionButtons();
 
 		// Clear stale DOM Elements
 		const dealerHandDiv = document.getElementById('dealer-hand') as HTMLElement;
