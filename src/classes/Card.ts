@@ -14,6 +14,46 @@ export default class Card {
 		this.isFaceDown = isFaceDown || false;
 	}
 
+	generateCardFace() {
+		if (!this.domElement) {
+			return;
+		}
+
+		let colorClass = ['♣', '♠'].includes(this.suit) ? 'black' : 'red';
+		let valueText: string;
+
+		if (this.value > 10) {
+			switch (this.value) {
+				case 11:
+					valueText = 'J';
+					break;
+				case 12:
+					valueText = 'Q';
+					break;
+				case 13:
+					valueText = 'K';
+					break;
+
+				default:
+					valueText = 'A';
+					break;
+			}
+		} else {
+			valueText = this.value.toString();
+		}
+
+		showElement(this.domElement, `card card-${colorClass}`);
+		this.domElement.innerText = `${valueText}${this.suit}`;
+	}
+
+	flipOver() {
+		if (!this.isFaceDown) {
+			return;
+		} else {
+			return this.generateCardFace();
+		}
+	}
+
 	createCardElement(parentHandDiv: HTMLDivElement) {
 		// Create DOM Element
 		this.domElement = document.createElement('div');
@@ -23,31 +63,7 @@ export default class Card {
 			showElement(this.domElement, 'card card-black face-down');
 			this.domElement.innerText = `?`;
 		} else {
-			let colorClass = ['♣', '♠'].includes(this.suit) ? 'black' : 'red';
-			let valueText: string;
-
-			if (this.value > 10) {
-				switch (this.value) {
-					case 11:
-						valueText = 'J';
-						break;
-					case 12:
-						valueText = 'Q';
-						break;
-					case 13:
-						valueText = 'K';
-						break;
-
-					default:
-						valueText = 'A';
-						break;
-				}
-			} else {
-				valueText = this.value.toString();
-			}
-
-			showElement(this.domElement, `card card-${colorClass}`);
-			this.domElement.innerText = `${valueText}${this.suit}`;
+			this.generateCardFace();
 		}
 
 		// Append to UI

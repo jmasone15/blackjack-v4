@@ -5,10 +5,11 @@ const { showElement, dealerDiv, playerHandsDiv } = domElements;
 
 export default class Hand {
 	id: number;
-	cards: Card[];
-	aceCount: number;
+	private cards: Card[];
+	private aceCount: number;
 	private total: number;
-	isDealer: boolean;
+	private isDealer: boolean;
+	private isActive: boolean;
 	hideTotal: boolean;
 	domElement: HTMLDivElement;
 	totalElement: HTMLParagraphElement;
@@ -19,6 +20,7 @@ export default class Hand {
 		this.cards = [];
 		this.total = 0;
 		this.aceCount = 0;
+		this.isActive = false;
 		this.isDealer = this.id == -1;
 		this.hideTotal = this.isDealer;
 		this.domElement = document.createElement('div');
@@ -42,6 +44,26 @@ export default class Hand {
 			dealerDiv.appendChild(this.domElement);
 		} else {
 			playerHandsDiv.appendChild(this.domElement);
+		}
+	}
+
+	get isTurnOver() {
+		return this.total > 20;
+	}
+
+	// Dealer will hit until 17 or more.
+	get shouldDealerHit() {
+		return this.total < 17;
+	}
+
+	// Highlight the total in the case of split hands
+	set active(bool: boolean) {
+		this.isActive = bool;
+
+		if (this.isActive) {
+			showElement(this.totalElement, 'total total-highlight');
+		} else {
+			showElement(this.totalElement, 'total');
 		}
 	}
 
@@ -98,7 +120,15 @@ export default class Hand {
 		this.totalElement.innerText = totalString;
 	}
 
-	endTurnCheck() {
-		return this.total > 20;
+	showHandAndTotal() {
+		this.cards.forEach((card: Card) => {
+			if (card.isFaceDown) {
+				card.flipOver();
+			}
+		});
+
+		this.hideTotal = false;
+
+		return this.calculateTotal();
 	}
 }

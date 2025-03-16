@@ -3,6 +3,7 @@ import delay from '../utils/delay';
 import Card from '../classes/Card';
 import Hand from './Hand';
 import ActionButton from './ActionButton';
+import ActionButtons from './ActionButtons';
 
 // DOM Elements
 const {
@@ -29,27 +30,19 @@ export default class Game {
 	playerHandCurrentIdx: number = 0;
 
 	// Action Buttons
-	hitButton: ActionButton;
-	standButton: ActionButton;
-	splitButton: ActionButton;
-	doubleButton: ActionButton;
-	actionButtonsArray: ActionButton[];
+	actionButtons: ActionButtons;
 
 	constructor() {
 		// Create & Shuffle Deck
 		this.createDeck();
 
 		// Create Action Buttons
-		this.hitButton = new ActionButton('hit', this.hit);
-		this.standButton = new ActionButton('stand', this.stand);
-		this.splitButton = new ActionButton('split', this.split);
-		this.doubleButton = new ActionButton('double', this.double);
-		this.actionButtonsArray = [
-			this.hitButton,
-			this.standButton,
-			this.splitButton,
-			this.doubleButton
-		];
+		this.actionButtons = new ActionButtons(
+			new ActionButton('hit', this.hit),
+			new ActionButton('stand', this.stand),
+			new ActionButton('split', this.split),
+			new ActionButton('double', this.double)
+		);
 
 		// Event Listeners
 		startBtn.addEventListener('click', (e: Event) => {
@@ -80,16 +73,19 @@ export default class Game {
 		// Pause after deal
 		await delay(500);
 
-		// Blackjack off Draw Check
-		if (this.dealerHand.endTurnCheck()) {
+		// Immediate Blackjack
+		if (this.dealerHand.isTurnOver) {
 			return this.endRound();
 		}
-		if (this.playerHands[this.playerHandCurrentIdx].endTurnCheck()) {
+		if (this.playerHands[this.playerHandCurrentIdx].isTurnOver) {
 			return this.dealerTurn();
 		}
 
+		// Activate user Hand
+		this.playerHands[this.playerHandCurrentIdx].active = true;
+
 		// Enable Action Buttons
-		this.enableUserAction();
+		this.actionButtons.enableUserAction();
 
 		return;
 	}
@@ -141,33 +137,22 @@ export default class Game {
 		await delay(250);
 	}
 
-	enableUserAction() {
-		for (const button of this.actionButtonsArray) {
-			button.enableButton();
-		}
-	}
-
-	disbaleUserAction() {
-		for (const button of this.actionButtonsArray) {
-			button.disableButton();
-		}
-	}
-
 	hit = async () => {
-		this.disbaleUserAction();
+		this.actionButtons.disableUserAction();
 
 		await this.deal(false, false);
 
-		if (this.playerHands[this.playerHandCurrentIdx].endTurnCheck()) {
+		if (this.playerHands[this.playerHandCurrentIdx].isTurnOver) {
 			return this.dealerTurn();
 		}
 
-		return this.enableUserAction();
+		return this.actionButtons.enableUserAction();
 	};
 
-	stand() {
-		console.log('stand');
-	}
+	stand = () => {
+		this.actionButtons.disableUserAction();
+		return this.dealerTurn();
+	};
 
 	split() {
 		console.log('split');
@@ -177,11 +162,24 @@ export default class Game {
 		console.log('double');
 	}
 
-	dealerTurn() {
-		console.log('dealer turn');
+	async dealerTurn() {
+		// Deactivate user hand
+		this.playerHands[this.playerHandCurrentIdx].active = false;
+
+		// Show flipped cards and total
+		this.dealerHand?.showHandAndTotal();
+		await delay(250);
+
+		while (this.dealerHand?.shouldDealerHit) {
+			await this.deal(true, false);
+		}
+
+		return this.endRound();
 	}
 
 	endRound() {
+		this.dealerHand?.showHandAndTotal();
+
 		console.log('end round');
 	}
 }

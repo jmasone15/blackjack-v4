@@ -164,6 +164,11 @@ button {
   padding: 5px 8px;
 }
 
+.total-highlight {
+  color: rgb(243, 243, 129);
+  border-color: rgb(243, 243, 129);
+}
+
 .disabled {
   background-color: grey !important;
   cursor: not-allowed !important;
