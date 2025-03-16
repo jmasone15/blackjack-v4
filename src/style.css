@@ -135,6 +135,12 @@ h3 {
   background-color: lightgrey;
 }
 
+.card-double {
+  transform: rotate(90deg);
+  position: relative;
+  right: -10px;
+}
+
 .buttons {
   position: fixed;
   bottom: 0;
@@ -210,6 +216,12 @@ button {
   .card {
     width: 50px;
     height: 75px;
+  }
+
+  .card-double {
+    transform: none;
+    position: relative;
+    right: 0;
   }
 
   .buttons {

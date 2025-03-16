@@ -6,12 +6,14 @@ export default class Card {
 	suit: string;
 	value: number;
 	isFaceDown: boolean;
+	isDoubleCard: boolean;
 	domElement?: HTMLDivElement;
 
 	constructor(suit: string, value: number, isFaceDown?: boolean) {
 		this.suit = suit;
 		this.value = value;
 		this.isFaceDown = isFaceDown || false;
+		this.isDoubleCard = false;
 	}
 
 	generateCardFace() {
@@ -47,9 +49,11 @@ export default class Card {
 	}
 
 	flipOver() {
-		if (!this.isFaceDown) {
+		if (!this.isFaceDown && !this.isDoubleCard) {
 			return;
 		} else {
+			this.isDoubleCard = false;
+			this.isFaceDown = false;
 			return this.generateCardFace();
 		}
 	}
@@ -59,7 +63,10 @@ export default class Card {
 		this.domElement = document.createElement('div');
 
 		// Set DOM Element Properties
-		if (this.isFaceDown) {
+		if (this.isDoubleCard) {
+			showElement(this.domElement, 'card card-black card-double');
+			this.domElement.innerText = `?`;
+		} else if (this.isFaceDown) {
 			showElement(this.domElement, 'card card-black face-down');
 			this.domElement.innerText = `?`;
 		} else {
@@ -68,5 +75,7 @@ export default class Card {
 
 		// Append to UI
 		parentHandDiv.appendChild(this.domElement);
+
+		return;
 	}
 }

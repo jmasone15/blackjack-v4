@@ -144,7 +144,11 @@ export default class Game {
 		}
 	}
 
-	async deal(toDealer: boolean, isFaceDown: boolean) {
+	async deal(
+		toDealer: boolean,
+		isFaceDown: boolean,
+		isDouble: boolean = false
+	) {
 		await delay(250);
 
 		// Temp Variables
@@ -160,7 +164,7 @@ export default class Game {
 
 		// Set Card Properties and Deal
 		targetCard.isFaceDown = isFaceDown;
-		targetHand.deal(targetCard);
+		targetHand.deal(targetCard, isDouble);
 
 		// Increment Deck
 		this.currentDeckIdx++;
@@ -189,8 +193,11 @@ export default class Game {
 		console.log('split');
 	};
 
-	double = () => {
-		console.log('double');
+	double = async () => {
+		this.playerHands[this.playerHandCurrentIdx].double = true;
+		await this.deal(false, true, true);
+		await delay(500);
+		return this.dealerTurn();
 	};
 
 	async dealerTurn() {
@@ -247,6 +254,8 @@ export default class Game {
 
 		// Determine win scenario for each player hand
 		this.playerHands.forEach((hand: Hand) => {
+			hand.showHandAndTotal(true);
+
 			const handWin = this.handWin(hand.total);
 			const handText = `Hand ${hand.id}`;
 

@@ -11,6 +11,7 @@ export default class Hand {
 	private isDealer: boolean;
 	private isActive: boolean;
 	hideTotal: boolean;
+	doubledHand: boolean;
 	domElement: HTMLDivElement;
 	totalElement: HTMLParagraphElement;
 	cardsContainerElement: HTMLDivElement;
@@ -23,6 +24,7 @@ export default class Hand {
 		this.isActive = false;
 		this.isDealer = this.id == -1;
 		this.hideTotal = this.isDealer;
+		this.doubledHand = false;
 		this.domElement = document.createElement('div');
 		this.totalElement = document.createElement('p') as HTMLParagraphElement;
 		this.cardsContainerElement = document.createElement('div');
@@ -67,7 +69,14 @@ export default class Hand {
 		}
 	}
 
-	deal(card: Card) {
+	set double(bool: boolean) {
+		this.doubledHand = bool;
+		this.hideTotal = bool;
+	}
+
+	deal(card: Card, isDouble: boolean) {
+		// Set Card Properties and Create DOM Elements
+		card.isDoubleCard = isDouble;
 		this.cards.push(card);
 		card.createCardElement(this.domElement);
 
@@ -127,7 +136,7 @@ export default class Hand {
 
 	showHandAndTotal(showMaxTotal: boolean = false) {
 		this.cards.forEach((card: Card) => {
-			if (card.isFaceDown) {
+			if (card.isFaceDown || card.isDoubleCard) {
 				card.flipOver();
 			}
 		});
