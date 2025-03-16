@@ -5,6 +5,7 @@ import Hand from './Hand';
 import ActionButton from './ActionButton';
 import ActionButtons from './ActionButtons';
 import removeDOMChildren from '../utils/removeDOMChildren';
+import Money from './Money';
 
 // DOM Elements
 const {
@@ -33,6 +34,9 @@ export default class Game {
 	private playerHands: Hand[] = [];
 	playerHandCurrentIdx: number = 0;
 
+	// Money Variables
+	private money: Money;
+
 	// Action Buttons
 	actionButtons: ActionButtons;
 
@@ -47,6 +51,9 @@ export default class Game {
 			new ActionButton('split', this.split),
 			new ActionButton('double', this.double)
 		);
+
+		// Create Money Class
+		this.money = new Money();
 
 		// Event Listeners
 		startBtn.addEventListener('click', (e: Event) => {
@@ -99,6 +106,9 @@ export default class Game {
 		showElement(dealerDiv);
 		showElement(playerDiv);
 		showElement(buttonsDiv, 'buttons');
+
+		// Decrement Money
+		this.money.lose();
 
 		// Create Hands
 		this.dealerHand = new Hand(-1);
@@ -342,7 +352,6 @@ export default class Game {
 		this.dealerHand?.showHandAndTotal(true);
 
 		// Determine win scenario for each player hand
-		console.log(this.playerHands);
 		this.playerHands.forEach((hand: Hand) => {
 			hand.showHandAndTotal(true);
 
@@ -355,9 +364,11 @@ export default class Game {
 					break;
 				case 1:
 					console.log(`${handText} - Player Win`);
+					this.money.win();
 					break;
 				case 2:
 					console.log(`${handText} - Push`);
+					this.money.push();
 					break;
 
 				default:

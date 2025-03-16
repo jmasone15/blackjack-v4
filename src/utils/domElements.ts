@@ -10,8 +10,17 @@ class DOMElements {
 	buttonsDiv = document.getElementById('buttons') as HTMLDivElement;
 	mainMenuBtn = document.getElementById('main-menu') as HTMLButtonElement;
 	nextRoundBtn = document.getElementById('next-round') as HTMLButtonElement;
+	totalMoneySpan = document.getElementById('total-money') as HTMLSpanElement;
+	currentBetSpan = document.getElementById('current-bet') as HTMLSpanElement;
+	betButtons: HTMLButtonElement[];
 
 	constructor() {
+		const betBtnNodeList: NodeList = document.querySelectorAll('.bet-btn');
+		this.betButtons = Array.from(
+			betBtnNodeList,
+			(node: Node) => node as HTMLButtonElement
+		);
+
 		console.log('DOM Elements Class ready');
 	}
 

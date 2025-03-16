@@ -51,6 +51,26 @@ a {
   font-weight: bold;
 }
 
+.info-bar {
+  position: fixed;
+  top: 60px;
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-end;
+  color: rgb(207, 206, 206);
+}
+
+.info-bar-money {
+  margin: 0 10px;
+}
+
+.pre-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .pre-game h1,
 h3 {
   margin-block-start: 0px;
@@ -71,6 +91,7 @@ h3 {
 
 #start-btn {
   background-color: rgb(61, 61, 61);
+  margin-top: 10px;
   font-size: 20px;
 }
 
@@ -202,6 +223,26 @@ button {
   filter: brightness(1.2);
 }
 
+#bet-container {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 20px 20px;
+  border-radius: 5px;
+  width: 80%;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.bet-btn {
+  background-color: #1976d2;
+  margin: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.bet-btn-active {
+  background-color: #2e7d32 !important;
+}
+
 @media (max-height: 800px) {
   .spacer {
     height: 0;
@@ -230,5 +271,9 @@ button {
 
   .nav-links {
     gap: 10px;
+  }
+
+  .info-bar {
+    justify-content: center;
   }
 }

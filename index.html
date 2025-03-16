@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blackjack Game</title>
+  <title>Blackjack</title>
   <link rel="icon" type="image/svg+xml" href="/gambling-playing-cards-svgrepo-com.svg" />
   <link rel="stylesheet" href="style.css">
 </head>
@@ -20,10 +20,23 @@
       <a href="#">Stats</a>
     </div>
   </nav>
+  <div class="info-bar">
+    <div class="info-bar-money">
+      <span>| <i>Total Money:</i> <span id="total-money">$0</span> | </span>
+      <span><i>Current Bet:</i> <span id="current-bet">$0</span> |</span>
+    </div>
+  </div>
   <div class="game-container">
     <div class="pre-game" id="pregame-section">
       <h1>Blackjack</h1>
       <h3><i>Set your bet amount and click the "Start" button to start the next round.</i></h3>
+      <div id="bet-container">
+        <h3><u>Set Bet Amount:</u></h3>
+        <button class="button bet-btn bet-btn-active" data-value="10">$10</button>
+        <button class="button bet-btn" data-value="50">$50</button>
+        <button class="button bet-btn" data-value="100">$100</button>
+        <button class="button bet-btn" data-value="500">$500</button>
+      </div>
       <button id="start-btn" class="button">Start</button>
     </div>
     <section class="d-none" id="dealer-section">
