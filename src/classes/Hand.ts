@@ -5,7 +5,7 @@ const { showElement, dealerDiv, playerHandsDiv } = domElements;
 
 export default class Hand {
 	id: number;
-	private cards: Card[];
+	cards: Card[];
 	aceCount: number;
 	private total: number;
 	isDealer: boolean;
@@ -96,5 +96,9 @@ export default class Hand {
 
 		// Update DOM
 		this.totalElement.innerText = totalString;
+	}
+
+	endTurnCheck() {
+		return this.total > 20;
 	}
 }

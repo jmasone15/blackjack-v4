@@ -24,8 +24,8 @@ export default class Game {
 	private currentDeckIdx: number = 0;
 
 	// Hand Variables
-	dealerHand: Hand | undefined;
-	playerHands: Hand[] = [];
+	private dealerHand: Hand | undefined;
+	private playerHands: Hand[] = [];
 	playerHandCurrentIdx: number = 0;
 
 	// Action Buttons
@@ -39,7 +39,7 @@ export default class Game {
 		// Create & Shuffle Deck
 		this.createDeck();
 
-		// Action Buttons
+		// Create Action Buttons
 		this.hitButton = new ActionButton('hit', this.hit);
 		this.standButton = new ActionButton('stand', this.stand);
 		this.splitButton = new ActionButton('split', this.split);
@@ -74,17 +74,24 @@ export default class Game {
 
 		// Deal Initial Cards
 		for (let i = 0; i < 4; i++) {
-			await delay(500);
-			this.deal(i % 2 !== 0, i == 3);
+			await this.deal(i % 2 !== 0, i == 3);
 		}
 
 		// Pause after deal
 		await delay(500);
 
-		// Enable Action Buttons
-		for (const button of this.actionButtonsArray) {
-			button.enableButton();
+		// Blackjack off Draw Check
+		if (this.dealerHand.endTurnCheck()) {
+			return this.endRound();
 		}
+		if (this.playerHands[this.playerHandCurrentIdx].endTurnCheck()) {
+			return this.dealerTurn();
+		}
+
+		// Enable Action Buttons
+		this.enableUserAction();
+
+		return;
 	}
 
 	createDeck() {
@@ -110,7 +117,9 @@ export default class Game {
 		}
 	}
 
-	deal(toDealer: boolean, isFaceDown: boolean) {
+	async deal(toDealer: boolean, isFaceDown: boolean) {
+		await delay(250);
+
 		// Temp Variables
 		let targetHand: Hand;
 		let targetCard = this.currentDeck[this.currentDeckIdx];
@@ -128,11 +137,33 @@ export default class Game {
 
 		// Increment Deck
 		this.currentDeckIdx++;
+
+		await delay(250);
 	}
 
-	hit() {
-		console.log('hit me!');
+	enableUserAction() {
+		for (const button of this.actionButtonsArray) {
+			button.enableButton();
+		}
 	}
+
+	disbaleUserAction() {
+		for (const button of this.actionButtonsArray) {
+			button.disableButton();
+		}
+	}
+
+	hit = async () => {
+		this.disbaleUserAction();
+
+		await this.deal(false, false);
+
+		if (this.playerHands[this.playerHandCurrentIdx].endTurnCheck()) {
+			return this.dealerTurn();
+		}
+
+		return this.enableUserAction();
+	};
 
 	stand() {
 		console.log('stand');
@@ -144,5 +175,13 @@ export default class Game {
 
 	double() {
 		console.log('double');
+	}
+
+	dealerTurn() {
+		console.log('dealer turn');
+	}
+
+	endRound() {
+		console.log('end round');
 	}
 }
