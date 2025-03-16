@@ -4,6 +4,7 @@ import Card from '../classes/Card';
 import Hand from './Hand';
 import ActionButton from './ActionButton';
 import ActionButtons from './ActionButtons';
+import removeDOMChildren from '../utils/removeDOMChildren';
 
 // DOM Elements
 const {
@@ -13,7 +14,10 @@ const {
 	pregameDiv,
 	dealerDiv,
 	playerDiv,
-	buttonsDiv
+	playerHandsDiv,
+	buttonsDiv,
+	nextRoundBtn,
+	mainMenuBtn
 } = domElements;
 
 export default class Game {
@@ -49,13 +53,41 @@ export default class Game {
 			e.preventDefault();
 			return this.startRound();
 		});
+		mainMenuBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+
+			// Clear stale data and elements
+			this.reset();
+
+			// Update DOM
+			hideElement(dealerDiv);
+			hideElement(playerDiv);
+			hideElement(buttonsDiv);
+			showElement(pregameDiv, 'pre-game');
+
+			return;
+		});
+		nextRoundBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+
+			// Clear stale data and elements
+			this.reset();
+
+			// Start next round
+			return this.startRound();
+		});
 
 		console.log('Game Class ready');
 	}
 
 	async startRound() {
+		// Disable Action Buttons
+		this.actionButtons.disableUserAction();
+
 		// Update DOM
 		hideElement(pregameDiv);
+		hideElement(mainMenuBtn);
+		hideElement(nextRoundBtn);
 		showElement(dealerDiv);
 		showElement(playerDiv);
 		showElement(buttonsDiv, 'buttons');
@@ -76,8 +108,7 @@ export default class Game {
 		// Immediate Blackjack
 		if (this.dealerHand.isTurnOver) {
 			return this.endRound();
-		}
-		if (this.playerHands[this.playerHandCurrentIdx].isTurnOver) {
+		} else if (this.playerHands[this.playerHandCurrentIdx].isTurnOver) {
 			return this.dealerTurn();
 		}
 
@@ -154,13 +185,13 @@ export default class Game {
 		return this.dealerTurn();
 	};
 
-	split() {
+	split = () => {
 		console.log('split');
-	}
+	};
 
-	double() {
+	double = () => {
 		console.log('double');
-	}
+	};
 
 	async dealerTurn() {
 		// Deactivate user hand
@@ -177,9 +208,79 @@ export default class Game {
 		return this.endRound();
 	}
 
-	endRound() {
-		this.dealerHand?.showHandAndTotal();
+	handWin(playerHandTotal: number): number {
+		// -1 - error
+		// 0 - player hand loss
+		// 1 - player hand win
+		// 2 - player hand push
 
-		console.log('end round');
+		// Null Check
+		if (!this.dealerHand) {
+			return -1;
+		}
+
+		const dealerTotal = this.dealerHand.total;
+
+		// Player/Dealer - Bust
+		if (playerHandTotal > 21) {
+			return 0;
+		} else if (dealerTotal > 21) {
+			return 1;
+		}
+
+		// Player/Dealer - Push
+		if (playerHandTotal == dealerTotal) {
+			return 2;
+		}
+
+		// Dealer - No Bust
+		if (dealerTotal > playerHandTotal) {
+			return 0;
+		} else {
+			return 1;
+		}
+	}
+
+	endRound() {
+		// Dealer hand may not be shown if they get initial blackjack
+		this.dealerHand?.showHandAndTotal(true);
+
+		// Determine win scenario for each player hand
+		this.playerHands.forEach((hand: Hand) => {
+			const handWin = this.handWin(hand.total);
+			const handText = `Hand ${hand.id}`;
+
+			switch (handWin) {
+				case 0:
+					console.log(`${handText} - Dealer Win`);
+					break;
+				case 1:
+					console.log(`${handText} - Player Win`);
+					break;
+				case 2:
+					console.log(`${handText} - Push`);
+					break;
+
+				default:
+					console.error(`${handText} - Something went wrong...`);
+					break;
+			}
+		});
+
+		// Switch from Action Buttons to End Round Buttons
+		this.actionButtons.hideActionButtons();
+		showElement(nextRoundBtn, 'button');
+		showElement(mainMenuBtn, 'button');
+	}
+
+	reset() {
+		// Clear stale Game data
+		this.dealerHand = undefined;
+		this.playerHands = [];
+
+		// Clear stale DOM Elements
+		const dealerHandDiv = document.getElementById('dealer-hand') as HTMLElement;
+		dealerHandDiv.remove();
+		removeDOMChildren(playerHandsDiv);
 	}
 }

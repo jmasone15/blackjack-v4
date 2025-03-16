@@ -16,6 +16,8 @@ export default class ActionButtons {
 		this.standButton = stand;
 		this.splitButton = split;
 		this.doubleButton = double;
+
+		console.log('Action Buttons Class ready');
 	}
 
 	enableUserAction() {
@@ -32,6 +34,15 @@ export default class ActionButtons {
 			if (Object.prototype.hasOwnProperty.call(this, button)) {
 				const actionButton = this[button] as ActionButton;
 				actionButton.disableButton();
+			}
+		}
+	}
+
+	hideActionButtons() {
+		for (const button in this) {
+			if (Object.prototype.hasOwnProperty.call(this, button)) {
+				const actionButton = this[button] as ActionButton;
+				actionButton.hideButton();
 			}
 		}
 	}

@@ -8,6 +8,8 @@ class DOMElements {
 	playerDiv = document.getElementById('player-section') as HTMLDivElement;
 	playerHandsDiv = document.getElementById('player-hands') as HTMLDivElement;
 	buttonsDiv = document.getElementById('buttons') as HTMLDivElement;
+	mainMenuBtn = document.getElementById('main-menu') as HTMLButtonElement;
+	nextRoundBtn = document.getElementById('next-round') as HTMLButtonElement;
 
 	constructor() {
 		console.log('DOM Elements Class ready');

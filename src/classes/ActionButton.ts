@@ -1,6 +1,6 @@
 import domElements from '../utils/domElements';
 
-const { showElement } = domElements;
+const { showElement, hideElement } = domElements;
 
 export default class ActionButton {
 	domElement: HTMLButtonElement;
@@ -18,8 +18,6 @@ export default class ActionButton {
 				return console.log('Button Disabled');
 			}
 		});
-
-		console.log(`Action Button (${id}) ready.`);
 	}
 
 	enableButton() {
@@ -29,6 +27,11 @@ export default class ActionButton {
 
 	disableButton() {
 		showElement(this.domElement, 'disabled');
+		return;
+	}
+
+	hideButton() {
+		hideElement(this.domElement);
 		return;
 	}
 }

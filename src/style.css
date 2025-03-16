@@ -182,11 +182,13 @@ button {
   background-color: #ff9800;
 }
 
-#stand {
+#stand,
+#main-menu {
   background-color: #d32f2f;
 }
 
-#split {
+#split,
+#next-round {
   background-color: #1976d2;
 }
 

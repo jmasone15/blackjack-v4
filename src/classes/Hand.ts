@@ -5,9 +5,9 @@ const { showElement, dealerDiv, playerHandsDiv } = domElements;
 
 export default class Hand {
 	id: number;
+	total: number;
 	private cards: Card[];
 	private aceCount: number;
-	private total: number;
 	private isDealer: boolean;
 	private isActive: boolean;
 	hideTotal: boolean;
@@ -78,7 +78,7 @@ export default class Hand {
 		this.calculateTotal();
 	}
 
-	calculateTotal() {
+	calculateTotal(showMaxTotal: boolean = false) {
 		// Set Variables
 		this.total = 0;
 		let totalString: string;
@@ -104,7 +104,12 @@ export default class Hand {
 				totalString = '21';
 				this.total = 21;
 			} else {
-				totalString = `${this.total} / ${this.total + 10}`;
+				if (showMaxTotal) {
+					totalString = `${this.total + 10}`;
+				} else {
+					totalString = `${this.total} / ${this.total + 10}`;
+				}
+
 				this.total += 10;
 			}
 		} else {
@@ -120,7 +125,7 @@ export default class Hand {
 		this.totalElement.innerText = totalString;
 	}
 
-	showHandAndTotal() {
+	showHandAndTotal(showMaxTotal: boolean = false) {
 		this.cards.forEach((card: Card) => {
 			if (card.isFaceDown) {
 				card.flipOver();
@@ -129,6 +134,6 @@ export default class Hand {
 
 		this.hideTotal = false;
 
-		return this.calculateTotal();
+		return this.calculateTotal(showMaxTotal);
 	}
 }
