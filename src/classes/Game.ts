@@ -134,6 +134,8 @@ export default class Game {
 	}
 
 	createDeck() {
+		this.currentDeck = [];
+
 		// Generate Deck based on Game parameters.
 		for (let i = 0; i < this.deckCount; i++) {
 			this.suits.forEach((suit: string) => {
@@ -183,6 +185,13 @@ export default class Game {
 
 		// Increment Deck
 		this.currentDeckIdx++;
+
+		// Reshuffle
+		if (this.currentDeckIdx == this.currentDeck.length) {
+			console.log('Reshuffling...');
+			this.createDeck();
+			this.currentDeckIdx = 0;
+		}
 
 		await delay(250);
 	}
