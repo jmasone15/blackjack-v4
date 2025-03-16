@@ -84,6 +84,10 @@ export default class Game {
 		return this.playerHands[this.playerHandCurrentIdx];
 	}
 
+	get nextHand(): Hand {
+		return this.playerHands[this.playerHandCurrentIdx + 1];
+	}
+
 	async startRound() {
 		// Disable Action Buttons
 		this.actionButtons.disableUserAction();
@@ -107,9 +111,8 @@ export default class Game {
 		}
 
 		// Enable or Disable Split
-		if (!this.currentHand.canHandSplit) {
-			this.actionButtons.splitButton.permanentDisable = true;
-		}
+		this.actionButtons.splitButton.permanentDisable =
+			!this.currentHand.canHandSplit;
 
 		// Pause after deal
 		await delay(500);
@@ -223,9 +226,8 @@ export default class Game {
 		await this.deal(false, false);
 		await this.deal(false, false, false, newHand);
 
-		if (this.playerHands.length > 3) {
-			this.actionButtons.splitButton.permanentDisable = true;
-		}
+		// Checks to see if Split action should be disabled
+		this.checkSplitAction();
 
 		return this.actionButtons.enableUserAction();
 	};
@@ -240,10 +242,27 @@ export default class Game {
 		return this.endPlayerTurn();
 	};
 
+	checkSplitAction() {
+		if (this.playerHands.length > 3 || !this.currentHand.canHandSplit) {
+			this.actionButtons.splitButton.permanentDisable = true;
+			this.actionButtons.splitButton.disableButton();
+		}
+
+		return;
+	}
+
 	endPlayerTurn() {
 		// If no more hands for the player, move on to dealer
 		if (this.playerHands.length == this.playerHandCurrentIdx + 1) {
-			return this.dealerTurn();
+			this.dealerTurn();
+			return;
+		}
+
+		// If next hand is already at 21, continue.
+		if (this.nextHand.isTurnOver) {
+			this.playerHandCurrentIdx++;
+			this.endPlayerTurn();
+			return;
 		}
 
 		// Update which hand is active on UI
@@ -256,9 +275,7 @@ export default class Game {
 		this.actionButtons.enableUserAction();
 
 		// Disable Split for new Hand if necessary
-		if (this.playerHands.length > 3) {
-			this.actionButtons.splitButton.permanentDisable = true;
-		}
+		this.checkSplitAction();
 
 		return;
 	}
@@ -316,6 +333,7 @@ export default class Game {
 		this.dealerHand?.showHandAndTotal(true);
 
 		// Determine win scenario for each player hand
+		console.log(this.playerHands);
 		this.playerHands.forEach((hand: Hand) => {
 			hand.showHandAndTotal(true);
 

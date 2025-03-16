@@ -3,6 +3,7 @@ import Game from './classes/Game';
 
 // TODO
 // Split
+// Reshuffle
 // Money
 // Win/Loss Display
 
