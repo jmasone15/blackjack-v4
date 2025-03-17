@@ -18,7 +18,12 @@ const {
 	playerHandsDiv,
 	buttonsDiv,
 	nextRoundBtn,
-	mainMenuBtn
+	mainMenuBtn,
+	resultModal,
+	roundResultsDiv,
+	totalBetSpan,
+	resultHeader,
+	confetti
 } = domElements;
 
 export default class Game {
@@ -316,9 +321,9 @@ export default class Game {
 
 	handWin(playerHandTotal: number): number {
 		// -1 - error
-		// 0 - player hand loss
-		// 1 - player hand win
-		// 2 - player hand push
+		// 0 - Hand loss
+		// 1 - Hand win
+		// 2 - Hand push
 
 		// Null Check
 		if (!this.dealerHand) {
@@ -347,40 +352,75 @@ export default class Game {
 		}
 	}
 
-	endRound() {
+	async endRound() {
 		// Dealer hand may not be shown if they get initial blackjack
 		this.dealerHand?.showHandAndTotal(true);
+
+		// Calculate total bet with doubles and splits
+		let totalBet: number = 0;
+		let betDelta: number = 0;
 
 		// Determine win scenario for each player hand
 		this.playerHands.forEach((hand: Hand) => {
 			hand.showHandAndTotal(true);
+			let handBet: number = 0;
 
-			const handWin = this.handWin(hand.total);
-			const handText = `Hand ${hand.id}`;
+			if (hand.doubledHand) {
+				handBet += this.money.currentBet * 2;
+			} else {
+				handBet += this.money.currentBet;
+			}
 
+			// Determine hand result and create P tag
+			const handWin: number = this.handWin(hand.total);
+			const resultPEl: HTMLParagraphElement = document.createElement('p');
+			const handText =
+				this.playerHands.length == 1 ? '' : `${hand.handIdText} - `;
+
+			// Populate result UI
 			switch (handWin) {
 				case 0:
-					console.log(`${handText} - Dealer Win`);
+					resultPEl.innerHTML = `${handText}<b><span class="loss">Loss -$${handBet}</span></b>`;
+					betDelta -= handBet;
+					this.money.lose();
 					break;
 				case 1:
-					console.log(`${handText} - Player Win`);
+					resultPEl.innerHTML = `${handText}<b><span class="win">Win +$${handBet}</span></b>`;
+					betDelta += handBet;
 					this.money.win();
 					break;
 				case 2:
-					console.log(`${handText} - Push`);
+					resultPEl.innerHTML = `${handText}<b><span class="push">Push +$0</span></b>`;
 					this.money.push();
 					break;
 
 				default:
-					console.error(`${handText} - Something went wrong...`);
+					resultPEl.innerHTML = `${handText}<b><span class="loss">Something went wrong...</span></b>`;
 					break;
 			}
+
+			// Update DOM
+			totalBet += handBet;
+			roundResultsDiv.appendChild(resultPEl);
 		});
 
-		// Switch from Action Buttons to End Round Buttons
+		await delay(500);
+
+		// Update DOM
 		this.actionButtons.hideActionButtons();
+		totalBetSpan.innerText = `$${totalBet}`;
 		showElement(nextRoundBtn, 'button');
 		showElement(mainMenuBtn, 'button');
+		showElement(resultModal, 'modal');
+		if (betDelta > 0) {
+			showElement(resultHeader, 'win');
+			await confetti.addConfetti({ confettiNumber: 100 });
+			confetti.clearCanvas();
+		} else if (betDelta < 0) {
+			showElement(resultHeader, 'loss');
+		} else {
+			showElement(resultHeader);
+		}
 	}
 
 	reset() {
@@ -395,5 +435,7 @@ export default class Game {
 		const dealerHandDiv = document.getElementById('dealer-hand') as HTMLElement;
 		dealerHandDiv.remove();
 		removeDOMChildren(playerHandsDiv);
+		removeDOMChildren(roundResultsDiv);
+		hideElement(resultModal);
 	}
 }

@@ -22,7 +22,16 @@ export default class Money {
 			this.memorySet();
 		}
 
-		this.updateDOM();
+		// Set the current active Bet Button
+		let activeBtn;
+		betButtons.forEach((btn: HTMLButtonElement) => {
+			const buttonValue = btn.getAttribute('data-value');
+			if (buttonValue && parseInt(buttonValue) == this.currentBet) {
+				activeBtn = btn;
+			}
+		});
+
+		this.updateDOM(activeBtn);
 
 		// Event Listeners
 		betButtons.forEach((btn: HTMLButtonElement) => {
@@ -30,12 +39,12 @@ export default class Money {
 				e.preventDefault();
 
 				// Get Bet Amount from Button Properties
-				const buttonClickedValue = btn.getAttribute('data-value');
-				if (!buttonClickedValue) {
+				const buttonValue = btn.getAttribute('data-value');
+				if (!buttonValue) {
 					return;
 				}
 
-				this.currentBet = parseInt(buttonClickedValue);
+				this.currentBet = parseInt(buttonValue);
 				this.memorySet();
 				this.updateDOM(btn);
 
@@ -46,9 +55,13 @@ export default class Money {
 		console.log('Money Class ready');
 	}
 
+	get currentBetText(): string {
+		return `$${this.currentBet}`;
+	}
+
 	updateDOM(buttonToUpdate?: HTMLButtonElement) {
 		totalMoneySpan.innerText = `$${this.total}`;
-		currentBetSpan.innerText = `$${this.currentBet}`;
+		currentBetSpan.innerText = this.currentBetText;
 
 		if (buttonToUpdate) {
 			// Reset all other buttons and set button clicked to active

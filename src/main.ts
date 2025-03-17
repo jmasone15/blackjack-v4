@@ -2,7 +2,8 @@ import './style.css';
 import Game from './classes/Game';
 
 // TODO
-// Money
-// Win/Loss Display
+// Start w/ Extra Hands
+// API Connection
+// Leaderboard
 
 new Game();

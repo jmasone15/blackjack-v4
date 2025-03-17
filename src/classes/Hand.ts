@@ -59,10 +59,24 @@ export default class Hand {
 	}
 
 	get canHandSplit(): boolean {
-		return (
-			this.cards.length == 2 &&
-			this.cards[0].gameValue == this.cards[1].gameValue
-		);
+		// return (
+		// 	this.cards.length == 2 &&
+		// 	this.cards[0].gameValue == this.cards[1].gameValue
+		// );
+		return true;
+	}
+
+	get handIdText(): string {
+		switch (this.id) {
+			case 1:
+				return 'Hand One';
+			case 2:
+				return 'Hand Two';
+			case 3:
+				return 'Hand Three';
+			default:
+				return 'Hand Four';
+		}
 	}
 
 	// Highlight the total in the case of split hands

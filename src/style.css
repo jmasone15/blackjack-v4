@@ -171,6 +171,7 @@ h3 {
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   justify-content: center;
+  z-index: 5;
 }
 
 button {
@@ -241,6 +242,55 @@ button {
 
 .bet-btn-active {
   background-color: #2e7d32 !important;
+}
+
+.modal {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  color: black;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 80%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.win {
+  color: green;
+}
+
+.push {
+  color: rgb(219, 219, 0);
+}
+
+.loss {
+  color: red;
+}
+
+#close-modal {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #636463;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#close-modal:hover {
+  background: #2e7d32;
 }
 
 @media (max-height: 800px) {

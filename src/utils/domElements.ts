@@ -1,3 +1,5 @@
+import JSConfetti from 'js-confetti';
+
 // This file holds all DOM references within TypeScript. Keeps the main files cleaner, other files will simply reference.
 // Does not hold all possible event listeners. Only the ones that do not rely on game variables to run.
 
@@ -13,6 +15,12 @@ class DOMElements {
 	totalMoneySpan = document.getElementById('total-money') as HTMLSpanElement;
 	currentBetSpan = document.getElementById('current-bet') as HTMLSpanElement;
 	betButtons: HTMLButtonElement[];
+	resultModal = document.getElementById('result-modal') as HTMLDivElement;
+	roundResultsDiv = document.getElementById('round-results') as HTMLDivElement;
+	resultHeader = document.getElementById('result-header') as HTMLHeadingElement;
+	totalBetSpan = document.getElementById('initial-bet') as HTMLSpanElement;
+	closeModalBtn = document.getElementById('close-modal') as HTMLButtonElement;
+	confetti = new JSConfetti() as JSConfetti;
 
 	constructor() {
 		const betBtnNodeList: NodeList = document.querySelectorAll('.bet-btn');
@@ -20,6 +28,11 @@ class DOMElements {
 			betBtnNodeList,
 			(node: Node) => node as HTMLButtonElement
 		);
+
+		this.closeModalBtn.addEventListener('click', (e: Event) => {
+			this.hideElement(this.resultModal);
+			return;
+		});
 
 		console.log('DOM Elements Class ready');
 	}
