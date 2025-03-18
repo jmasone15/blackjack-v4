@@ -12,6 +12,7 @@ export default class Hand {
 	private isActive: boolean;
 	hideTotal: boolean;
 	doubledHand: boolean;
+	splitHand: boolean;
 	domElement: HTMLDivElement;
 	totalElement: HTMLParagraphElement;
 	cardsContainerElement: HTMLDivElement;
@@ -25,6 +26,7 @@ export default class Hand {
 		this.isDealer = this.id == -1;
 		this.hideTotal = this.isDealer;
 		this.doubledHand = false;
+		this.splitHand = false;
 		this.domElement = document.createElement('div');
 		this.totalElement = document.createElement('p') as HTMLParagraphElement;
 		this.cardsContainerElement = document.createElement('div');
@@ -85,6 +87,9 @@ export default class Hand {
 
 		if (this.doubledHand) {
 			startingText += ' (Double)';
+		}
+		if (this.splitHand) {
+			startingText += ' (Split)';
 		}
 
 		return startingText;

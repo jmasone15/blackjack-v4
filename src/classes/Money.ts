@@ -59,6 +59,10 @@ export default class Money {
 		return `$${this.currentBet}`;
 	}
 
+	enoughMoneyCheck(multiply: number = 1): boolean {
+		return this.currentBet * multiply <= this.total;
+	}
+
 	updateDOM(buttonToUpdate?: HTMLButtonElement) {
 		totalMoneySpan.innerText = `$${this.total}`;
 		currentBetSpan.innerText = this.currentBetText;

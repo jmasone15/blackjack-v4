@@ -2,8 +2,7 @@ import './style.css';
 import Game from './classes/Game';
 
 // TODO
-// Start w/ Extra Hands
-// Money Check when Starting Round
+// Toasts for Reshuffle and Money Check
 // API Connection
 // Leaderboard
 

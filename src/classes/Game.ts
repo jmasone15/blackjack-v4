@@ -75,12 +75,7 @@ export default class Game {
 			this.reset();
 
 			// Update DOM
-			hideElement(dealerDiv);
-			hideElement(playerDiv);
-			hideElement(buttonsDiv);
-			showElement(pregameDiv, 'pre-game');
-
-			return;
+			return this.returnToMain();
 		});
 		nextRoundBtn.addEventListener('click', (e: Event) => {
 			e.preventDefault();
@@ -125,6 +120,13 @@ export default class Game {
 	}
 
 	async startRound() {
+		// Enough Money Check
+		if (!this.money.enoughMoneyCheck(this.roundStartHandCount)) {
+			// Replace with TOAST
+			alert('Not enough money...');
+			return this.returnToMain();
+		}
+
 		// Disable Action Buttons
 		this.actionButtons.disableUserAction();
 
@@ -150,7 +152,7 @@ export default class Game {
 		await this.dealOneToAll(false);
 		await this.dealOneToAll(true);
 
-		// Enable or Disable Split
+		// Can Hands Split or Double
 		this.actionButtons.splitButton.permanentDisable =
 			!this.currentHand.canHandSplit;
 
@@ -161,7 +163,7 @@ export default class Game {
 		if (this.dealerHand.isTurnOver) {
 			return this.endRound();
 		} else if (this.currentHand.isTurnOver) {
-			return this.dealerTurn();
+			return this.endPlayerTurn();
 		}
 
 		// Activate User Hand
@@ -271,6 +273,17 @@ export default class Game {
 	split = async () => {
 		this.actionButtons.disableUserAction();
 
+		if (!this.money.enoughMoneyCheck()) {
+			alert('Not enough money...');
+
+			this.actionButtons.splitButton.permanentDisable = true;
+			this.actionButtons.enableUserAction();
+
+			return;
+		}
+
+		this.money.lose();
+
 		// Remove second card from original hand and update UI
 		const splitCard = this.currentHand.removeCardForSplit();
 		const newHand = new Hand(this.playerHands.length + 1);
@@ -278,6 +291,10 @@ export default class Game {
 		// Create new Hand and add splitCard
 		this.playerHands.push(newHand);
 		newHand.deal(splitCard, false);
+
+		// Set Split Hands flag
+		this.currentHand.splitHand = true;
+		newHand.splitHand = true;
 
 		// Pause
 		await delay(500);
@@ -294,6 +311,16 @@ export default class Game {
 
 	double = async () => {
 		this.actionButtons.disableUserAction();
+
+		if (!this.money.enoughMoneyCheck()) {
+			alert('Not enough money...');
+
+			this.actionButtons.doubleButton.permanentDisable = true;
+			this.actionButtons.enableUserAction();
+
+			return;
+		}
+
 		this.currentHand.double = true;
 		this.money.lose();
 
@@ -304,7 +331,11 @@ export default class Game {
 	};
 
 	checkSplitAction() {
-		if (this.playerHands.length > 3 || !this.currentHand.canHandSplit) {
+		if (
+			this.playerHands.length > 3 ||
+			!this.currentHand.canHandSplit ||
+			!this.money.enoughMoneyCheck()
+		) {
 			this.actionButtons.splitButton.permanentDisable = true;
 			this.actionButtons.splitButton.disableButton();
 		}
@@ -480,5 +511,13 @@ export default class Game {
 		removeDOMChildren(playerHandsDiv);
 		removeDOMChildren(roundResultsDiv);
 		hideElement(resultModal);
+	}
+
+	returnToMain() {
+		// Update DOM
+		hideElement(dealerDiv);
+		hideElement(playerDiv);
+		hideElement(buttonsDiv);
+		showElement(pregameDiv, 'pre-game');
 	}
 }
