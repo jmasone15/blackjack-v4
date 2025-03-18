@@ -6,6 +6,7 @@ import ActionButton from './ActionButton';
 import ActionButtons from './ActionButtons';
 import removeDOMChildren from '../utils/removeDOMChildren';
 import Money from './Money';
+import toast from './Toast';
 
 // DOM Elements
 const {
@@ -25,6 +26,7 @@ const {
 	resultHeader,
 	handButtons,
 	returnBetSpan,
+	handCountSpan,
 	confetti
 } = domElements;
 
@@ -96,8 +98,11 @@ export default class Game {
 					return;
 				}
 
-				// Set Hand Count and update UI
+				// Set Hand Count
 				this.roundStartHandCount = parseInt(buttonValue);
+
+				// Update DOM
+				handCountSpan.innerText = `${this.roundStartHandCount}`;
 				handButtons.forEach((button: HTMLButtonElement) => {
 					if (button == btn) {
 						showElement(button, 'button hand-btn hand-btn-active');
@@ -231,7 +236,7 @@ export default class Game {
 
 		// Reshuffle
 		if (this.currentDeckIdx == this.currentDeck.length) {
-			console.log('Reshuffling...');
+			toast.neutralToast('Reshuffling...');
 			this.createDeck();
 			this.currentDeckIdx = 0;
 		}

@@ -14,6 +14,7 @@ class DOMElements {
 	nextRoundBtn = document.getElementById('next-round') as HTMLButtonElement;
 	totalMoneySpan = document.getElementById('total-money') as HTMLSpanElement;
 	currentBetSpan = document.getElementById('current-bet') as HTMLSpanElement;
+	handCountSpan = document.getElementById('hand-count') as HTMLSpanElement;
 	resultModal = document.getElementById('result-modal') as HTMLDivElement;
 	roundResultsDiv = document.getElementById('round-results') as HTMLDivElement;
 	resultHeader = document.getElementById('result-header') as HTMLHeadingElement;
@@ -29,6 +30,8 @@ class DOMElements {
 		this.handButtons = this.convertNodeListToArray('.hand-btn');
 
 		this.closeModalBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+
 			this.hideElement(this.resultModal);
 			return;
 		});

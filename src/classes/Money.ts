@@ -1,4 +1,5 @@
 import domElements from '../utils/domElements';
+import toast from './Toast';
 
 const { totalMoneySpan, currentBetSpan, betButtons, showElement } = domElements;
 
@@ -77,20 +78,36 @@ export default class Money {
 	}
 
 	win() {
+		const totalWin = this.currentBet * 2;
+
+		// Update Memory
 		this.total += this.currentBet * 2;
 		this.memorySet();
+
+		// Update DOM
+		toast.positiveToast(`+ $${totalWin}`);
 		return this.updateDOM();
 	}
 
 	lose(multiply: number = 1) {
-		this.total -= this.currentBet * multiply;
+		const totalLoss = this.currentBet * multiply;
+
+		// Update memory
+		this.total -= totalLoss;
 		this.memorySet();
+
+		// Update DOM
+		toast.negativeToast(`- $${totalLoss}`);
 		return this.updateDOM();
 	}
 
 	push() {
+		// Update Memory
 		this.total += this.currentBet;
 		this.memorySet();
+
+		// Update DOM
+		toast.positiveToast(`+ $${this.currentBet}`);
 		return this.updateDOM();
 	}
 
