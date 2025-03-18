@@ -23,6 +23,8 @@ const {
 	roundResultsDiv,
 	totalBetSpan,
 	resultHeader,
+	handButtons,
+	returnBetSpan,
 	confetti
 } = domElements;
 
@@ -38,6 +40,7 @@ export default class Game {
 	private dealerHand: Hand | undefined;
 	private playerHands: Hand[] = [];
 	playerHandCurrentIdx: number = 0;
+	roundStartHandCount: number = 1;
 
 	// Money Variables
 	private money: Money;
@@ -88,6 +91,27 @@ export default class Game {
 			// Start next round
 			return this.startRound();
 		});
+		handButtons.forEach((btn: HTMLButtonElement) => {
+			btn.addEventListener('click', (e: Event) => {
+				e.preventDefault();
+
+				// Get Hand Count from Button Properties
+				const buttonValue = btn.getAttribute('data-value');
+				if (!buttonValue) {
+					return;
+				}
+
+				// Set Hand Count and update UI
+				this.roundStartHandCount = parseInt(buttonValue);
+				handButtons.forEach((button: HTMLButtonElement) => {
+					if (button == btn) {
+						showElement(button, 'button hand-btn hand-btn-active');
+					} else {
+						showElement(button, 'button hand-btn');
+					}
+				});
+			});
+		});
 
 		console.log('Game Class ready');
 	}
@@ -113,17 +137,18 @@ export default class Game {
 		showElement(buttonsDiv, 'buttons');
 
 		// Decrement Money
-		this.money.lose();
+		this.money.lose(this.roundStartHandCount);
 
 		// Create Hands
 		this.dealerHand = new Hand(-1);
-		this.playerHands.push(new Hand(this.playerHands.length + 1));
+		for (let i = 0; i < this.roundStartHandCount; i++) {
+			this.playerHands.push(new Hand(i + 1));
+		}
 		this.playerHandCurrentIdx = 0;
 
-		// Deal Initial Cards
-		for (let i = 0; i < 4; i++) {
-			await this.deal(i % 2 !== 0, i == 3);
-		}
+		// Initial Deal
+		await this.dealOneToAll(false);
+		await this.dealOneToAll(true);
 
 		// Enable or Disable Split
 		this.actionButtons.splitButton.permanentDisable =
@@ -144,6 +169,7 @@ export default class Game {
 
 		// Enable Action Buttons
 		this.actionButtons.enableUserAction();
+		this.checkSplitAction();
 
 		return;
 	}
@@ -211,6 +237,16 @@ export default class Game {
 		await delay(250);
 	}
 
+	async dealOneToAll(isSecondCard: boolean) {
+		// Deal One Card to Each Hand
+		for (let i = 0; i < this.playerHands.length; i++) {
+			await this.deal(false, false, false, this.playerHands[i]);
+		}
+
+		// Deal One Card to Dealer Last
+		await this.deal(true, isSecondCard);
+	}
+
 	hit = async () => {
 		this.actionButtons.disableUserAction();
 
@@ -259,6 +295,7 @@ export default class Game {
 	double = async () => {
 		this.actionButtons.disableUserAction();
 		this.currentHand.double = true;
+		this.money.lose();
 
 		await this.deal(false, true, true);
 		await delay(500);
@@ -276,6 +313,8 @@ export default class Game {
 	}
 
 	endPlayerTurn() {
+		this.currentHand.active = false;
+
 		// If no more hands for the player, move on to dealer
 		if (this.playerHands.length == this.playerHandCurrentIdx + 1) {
 			this.dealerTurn();
@@ -290,7 +329,6 @@ export default class Game {
 		}
 
 		// Update which hand is active on UI
-		this.currentHand.active = false;
 		this.playerHands[this.playerHandCurrentIdx + 1].active = true;
 		this.playerHandCurrentIdx++;
 
@@ -358,7 +396,7 @@ export default class Game {
 
 		// Calculate total bet with doubles and splits
 		let totalBet: number = 0;
-		let betDelta: number = 0;
+		let moneyRecieved: number = 0;
 
 		// Determine win scenario for each player hand
 		this.playerHands.forEach((hand: Hand) => {
@@ -375,22 +413,23 @@ export default class Game {
 			const handWin: number = this.handWin(hand.total);
 			const resultPEl: HTMLParagraphElement = document.createElement('p');
 			const handText =
-				this.playerHands.length == 1 ? '' : `${hand.handIdText} - `;
+				this.playerHands.length == 1 ? '' : `${hand.handIdText}: `;
 
 			// Populate result UI
 			switch (handWin) {
 				case 0:
-					resultPEl.innerHTML = `${handText}<b><span class="loss">Loss -$${handBet}</span></b>`;
-					betDelta -= handBet;
-					this.money.lose();
+					resultPEl.innerHTML = `${handText}<b><span class="loss">Loss - $${handBet}</span></b>`;
 					break;
 				case 1:
-					resultPEl.innerHTML = `${handText}<b><span class="win">Win +$${handBet}</span></b>`;
-					betDelta += handBet;
+					resultPEl.innerHTML = `${handText}<b><span class="win">Win + $${
+						handBet * 2
+					}</span></b>`;
+					moneyRecieved += handBet * 2;
 					this.money.win();
 					break;
 				case 2:
-					resultPEl.innerHTML = `${handText}<b><span class="push">Push +$0</span></b>`;
+					resultPEl.innerHTML = `${handText}<b><span class="push">Push + $${handBet}</span></b>`;
+					moneyRecieved += handBet;
 					this.money.push();
 					break;
 
@@ -409,14 +448,18 @@ export default class Game {
 		// Update DOM
 		this.actionButtons.hideActionButtons();
 		totalBetSpan.innerText = `$${totalBet}`;
+		returnBetSpan.innerText = `$${moneyRecieved}`;
+
 		showElement(nextRoundBtn, 'button');
 		showElement(mainMenuBtn, 'button');
 		showElement(resultModal, 'modal');
-		if (betDelta > 0) {
+
+		// Determine Confetti
+		if (moneyRecieved > totalBet) {
 			showElement(resultHeader, 'win');
 			await confetti.addConfetti({ confettiNumber: 100 });
 			confetti.clearCanvas();
-		} else if (betDelta < 0) {
+		} else if (moneyRecieved < totalBet) {
 			showElement(resultHeader, 'loss');
 		} else {
 			showElement(resultHeader);

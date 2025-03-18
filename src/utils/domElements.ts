@@ -14,20 +14,19 @@ class DOMElements {
 	nextRoundBtn = document.getElementById('next-round') as HTMLButtonElement;
 	totalMoneySpan = document.getElementById('total-money') as HTMLSpanElement;
 	currentBetSpan = document.getElementById('current-bet') as HTMLSpanElement;
-	betButtons: HTMLButtonElement[];
 	resultModal = document.getElementById('result-modal') as HTMLDivElement;
 	roundResultsDiv = document.getElementById('round-results') as HTMLDivElement;
 	resultHeader = document.getElementById('result-header') as HTMLHeadingElement;
 	totalBetSpan = document.getElementById('initial-bet') as HTMLSpanElement;
+	returnBetSpan = document.getElementById('return-bet') as HTMLSpanElement;
 	closeModalBtn = document.getElementById('close-modal') as HTMLButtonElement;
+	betButtons: HTMLButtonElement[];
+	handButtons: HTMLButtonElement[];
 	confetti = new JSConfetti() as JSConfetti;
 
 	constructor() {
-		const betBtnNodeList: NodeList = document.querySelectorAll('.bet-btn');
-		this.betButtons = Array.from(
-			betBtnNodeList,
-			(node: Node) => node as HTMLButtonElement
-		);
+		this.betButtons = this.convertNodeListToArray('.bet-btn');
+		this.handButtons = this.convertNodeListToArray('.hand-btn');
 
 		this.closeModalBtn.addEventListener('click', (e: Event) => {
 			this.hideElement(this.resultModal);
@@ -45,6 +44,11 @@ class DOMElements {
 	hideElement(element: HTMLElement): void {
 		element.setAttribute('class', 'd-none');
 		return;
+	}
+
+	convertNodeListToArray(classText: string): HTMLButtonElement[] {
+		const nodeList = document.querySelectorAll(classText);
+		return Array.from(nodeList, (node: Node) => node as HTMLButtonElement);
 	}
 }
 

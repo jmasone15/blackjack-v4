@@ -78,8 +78,8 @@ export default class Money {
 		return this.updateDOM();
 	}
 
-	lose() {
-		this.total -= this.currentBet;
+	lose(multiply: number = 1) {
+		this.total -= this.currentBet * multiply;
 		this.memorySet();
 		return this.updateDOM();
 	}

@@ -29,13 +29,22 @@
   <div class="game-container">
     <div class="pre-game" id="pregame-section">
       <h1>Blackjack</h1>
-      <h3><i>Set your bet amount and click the "Start" button to start the next round.</i></h3>
-      <div id="bet-container">
-        <h3><u>Set Bet Amount:</u></h3>
-        <button class="button bet-btn bet-btn-active" data-value="10">$10</button>
-        <button class="button bet-btn" data-value="50">$50</button>
-        <button class="button bet-btn" data-value="100">$100</button>
-        <button class="button bet-btn" data-value="500">$500</button>
+      <h3><i>Set your bet amount and hand count. Then, click the "Start" button to start the next round.</i></h3>
+      <div class="options">
+        <div class="options-container" id="bet-container">
+          <h3><u>Set Bet Amount:</u></h3>
+          <button class="button bet-btn bet-btn-active" data-value="10">$10</button>
+          <button class="button bet-btn" data-value="50">$50</button>
+          <button class="button bet-btn" data-value="100">$100</button>
+          <button class="button bet-btn" data-value="500">$500</button>
+        </div>
+        <div class="options-container">
+          <h3><u>Set Hand Count:</u></h3>
+          <button class="button hand-btn hand-btn-active" data-value="1">One</button>
+          <button class="button hand-btn" data-value="2">Two</button>
+          <button class="button hand-btn" data-value="3">Three</button>
+          <button class="button hand-btn" data-value="4">Four</button>
+        </div>
       </div>
       <button id="start-btn" class="button">Start</button>
     </div>
@@ -63,12 +72,10 @@
   <div id="result-modal" class="d-none">
     <div class="modal-content">
       <h2 id="result-header">Round Over</h2>
-      <p><i>Total Bet: <span id="initial-bet">$50</span></i></p>
+      <p><i>Total Bet: <span id="initial-bet" class="loss"></span> | Return: <span id="return-bet"
+            class="win"></span></i></p>
       <hr>
       <div id="round-results">
-        <!-- <p>Hand One: <b><span class="win">Win +$50</span></b></p>
-        <p>Hand Two: <b><span class="push">Push +$0</span></b></p>
-        <p>Hand Three: <b><span class="loss">Loss -$50</span></b></p> -->
       </div>
       <hr>
       <button id="close-modal">Close</button>

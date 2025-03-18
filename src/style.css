@@ -100,7 +100,7 @@ h3 {
   flex-direction: column;
   align-items: center;
   width: 90%;
-  max-width: 600px;
+  max-width: 1000px;
   text-align: center;
 }
 
@@ -224,23 +224,28 @@ button {
   filter: brightness(1.2);
 }
 
-#bet-container {
+.options-container {
   text-align: center;
   background-color: rgba(0, 0, 0, 0.3);
   padding: 20px 20px;
   border-radius: 5px;
-  width: 80%;
+  width: 40%;
   color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.bet-btn {
+.bet-btn,
+.hand-btn {
   background-color: #1976d2;
   margin: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.bet-btn-active {
+.bet-btn-active,
+.hand-btn-active {
   background-color: #2e7d32 !important;
 }
 
@@ -293,6 +298,13 @@ button {
   background: #2e7d32;
 }
 
+.options {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
+}
+
 @media (max-height: 800px) {
   .spacer {
     height: 0;
@@ -325,5 +337,21 @@ button {
 
   .info-bar {
     justify-content: center;
+  }
+
+  .pre-game h1 {
+    font-size: 25px;
+  }
+
+  .pre-game h3 {
+    font-size: 15px;
+  }
+
+  .bet-btn {
+    font-size: 12px !important;
+  }
+
+  .options-container {
+    width: 20%;
   }
 }
