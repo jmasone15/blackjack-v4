@@ -16,11 +16,17 @@ class DOMElements {
 	currentBetSpan = document.getElementById('current-bet') as HTMLSpanElement;
 	handCountSpan = document.getElementById('hand-count') as HTMLSpanElement;
 	resultModal = document.getElementById('result-modal') as HTMLDivElement;
+	loginModal = document.getElementById('login-modal') as HTMLDivElement;
 	roundResultsDiv = document.getElementById('round-results') as HTMLDivElement;
 	resultHeader = document.getElementById('result-header') as HTMLHeadingElement;
 	totalBetSpan = document.getElementById('initial-bet') as HTMLSpanElement;
 	returnBetSpan = document.getElementById('return-bet') as HTMLSpanElement;
 	closeModalBtn = document.getElementById('close-modal') as HTMLButtonElement;
+	usernameInput = document.getElementById('username') as HTMLInputElement;
+	usernameError = document.getElementById(
+		'username-error'
+	) as HTMLParagraphElement;
+	submitLoginBtn = document.getElementById('submit-login') as HTMLButtonElement;
 	betButtons: HTMLButtonElement[];
 	handButtons: HTMLButtonElement[];
 	confetti = new JSConfetti() as JSConfetti;

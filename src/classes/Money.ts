@@ -1,5 +1,6 @@
 import domElements from '../utils/domElements';
 import toast from './Toast';
+import api from './API';
 
 const { totalMoneySpan, currentBetSpan, betButtons, showElement } = domElements;
 
@@ -10,15 +11,14 @@ export default class Money {
 
 	constructor() {
 		this.memoryKey = 'blackjack-money';
+		this.total = -999;
 
 		// Get from Memory or Set Default to Memory
 		const storageString = localStorage.getItem(this.memoryKey);
 		if (storageString) {
-			const { total, currentBet } = JSON.parse(storageString);
-			this.total = total;
+			const { currentBet } = JSON.parse(storageString);
 			this.currentBet = currentBet;
 		} else {
-			this.total = 1000;
 			this.currentBet = 10;
 			this.memorySet();
 		}
@@ -60,12 +60,19 @@ export default class Money {
 		return `$${this.currentBet}`;
 	}
 
+	set totalMoney(money: number) {
+		this.total = money;
+		this.updateDOM();
+	}
+
 	enoughMoneyCheck(multiply: number = 1): boolean {
 		return this.currentBet * multiply <= this.total;
 	}
 
 	updateDOM(buttonToUpdate?: HTMLButtonElement) {
-		totalMoneySpan.innerText = `$${this.total}`;
+		if (this.total !== -999) {
+			totalMoneySpan.innerText = `$${this.total}`;
+		}
 		currentBetSpan.innerText = this.currentBetText;
 
 		if (buttonToUpdate) {
@@ -82,7 +89,7 @@ export default class Money {
 
 		// Update Memory
 		this.total += this.currentBet * 2;
-		this.memorySet();
+		this.apiSet();
 
 		// Update DOM
 		toast.positiveToast(`+ $${totalWin}`);
@@ -94,7 +101,7 @@ export default class Money {
 
 		// Update memory
 		this.total -= totalLoss;
-		this.memorySet();
+		this.apiSet();
 
 		// Update DOM
 		toast.negativeToast(`- $${totalLoss}`);
@@ -104,7 +111,7 @@ export default class Money {
 	push() {
 		// Update Memory
 		this.total += this.currentBet;
-		this.memorySet();
+		this.apiSet();
 
 		// Update DOM
 		toast.positiveToast(`+ $${this.currentBet}`);
@@ -113,9 +120,12 @@ export default class Money {
 
 	memorySet() {
 		const storageString: string = JSON.stringify({
-			total: this.total,
 			currentBet: this.currentBet
 		});
 		localStorage.setItem(this.memoryKey, storageString);
+	}
+
+	apiSet() {
+		return api.update(this.total, true);
 	}
 }

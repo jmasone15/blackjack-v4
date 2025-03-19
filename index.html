@@ -70,6 +70,15 @@
     <button class="d-none" id="next-round">Next Round</button>
   </div>
 
+  <div id="login-modal" class="d-none">
+    <div class="modal-content">
+      <h2>Blackjack Login</h2>
+      <input type="text" id="username" placeholder="Enter your username">
+      <p id="username-error" class="d-none">Username is required and must be 0-20 alphanumeric characters.</p>
+      <button id="submit-login" class="button">Submit</button>
+    </div>
+  </div>
+
   <div id="result-modal" class="d-none">
     <div class="modal-content">
       <h2 id="result-header">Round Over</h2>
@@ -82,6 +91,14 @@
       <button id="close-modal">Close</button>
     </div>
   </div>
+
+  <div id="loading-spinner" class="d-none">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+      <p id="loading-message">Loading...</p>
+    </div>
+  </div>
+
 
   <script type="module" src="/src/main.ts"></script>
 </body>

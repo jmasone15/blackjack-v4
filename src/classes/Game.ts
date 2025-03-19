@@ -7,6 +7,8 @@ import ActionButtons from './ActionButtons';
 import removeDOMChildren from '../utils/removeDOMChildren';
 import Money from './Money';
 import toast from './Toast';
+import api from './API';
+import loading from './Loading';
 
 // DOM Elements
 const {
@@ -113,6 +115,9 @@ export default class Game {
 			});
 		});
 
+		// Login or Get User
+		api.init();
+
 		console.log('Game Class ready');
 	}
 
@@ -125,10 +130,18 @@ export default class Game {
 	}
 
 	async startRound() {
+		// Set Money from API
+		if (!api.money) {
+			toast.negativeToast('Something went wrong...');
+			return;
+		}
+		if (this.money.total === -999) {
+			this.money.totalMoney = api.money;
+		}
+
 		// Enough Money Check
 		if (!this.money.enoughMoneyCheck(this.roundStartHandCount)) {
-			// Replace with TOAST
-			alert('Not enough money...');
+			toast.neutralToast('Not enough money...');
 			return this.returnToMain();
 		}
 
@@ -236,9 +249,10 @@ export default class Game {
 
 		// Reshuffle
 		if (this.currentDeckIdx == this.currentDeck.length) {
-			toast.neutralToast('Reshuffling...');
+			await loading.setLoading(true, 'Reshuffling...', 500);
 			this.createDeck();
 			this.currentDeckIdx = 0;
+			await loading.setLoading(false);
 		}
 
 		await delay(250);
@@ -279,7 +293,7 @@ export default class Game {
 		this.actionButtons.disableUserAction();
 
 		if (!this.money.enoughMoneyCheck()) {
-			alert('Not enough money...');
+			toast.neutralToast('Not enough money...');
 
 			this.actionButtons.splitButton.permanentDisable = true;
 			this.actionButtons.enableUserAction();
@@ -318,7 +332,7 @@ export default class Game {
 		this.actionButtons.disableUserAction();
 
 		if (!this.money.enoughMoneyCheck()) {
-			alert('Not enough money...');
+			toast.neutralToast('Not enough money...');
 
 			this.actionButtons.doubleButton.permanentDisable = true;
 			this.actionButtons.enableUserAction();

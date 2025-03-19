@@ -18,6 +18,8 @@ class Toast {
 				y: 60
 			}
 		};
+
+		console.log('Toast Class ready');
 	}
 
 	positiveToast(msg: string) {
