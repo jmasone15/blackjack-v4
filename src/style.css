@@ -228,6 +228,10 @@ button {
   background-color: #1976d2;
 }
 
+#action {
+  margin-bottom: 5px;
+}
+
 .button:hover {
   filter: brightness(1.2);
 }
@@ -462,6 +466,86 @@ button {
   background: #b71c1c;
 }
 
+#chatbot {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+#chatbot-icon {
+  width: 100%;
+  height: 100%;
+  background-color: #1976d2;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s;
+}
+
+#chatbot-icon:hover {
+  background-color: #1565c0;
+}
+
+#advice {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 150px;
+  min-height: 50px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+}
+
+#advice-btn,
+#ask-btn {
+  margin-top: 10px;
+  padding: 5px 10px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#advice-btn {
+  background: #d32f2f;
+}
+
+#ask-btn {
+  background: #218109;
+}
+
+#advice-btn:hover {
+  background: #b71c1c;
+}
+
+#ask-btn:hover {
+  background: #175806;
+}
+
+#chatbot-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid white;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
 
 @keyframes spin {
   0% {
@@ -489,6 +573,7 @@ button {
   .leaderboard-card h2 {
     display: none;
   }
+
 }
 
 @media (max-width: 750px) {

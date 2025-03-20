@@ -95,6 +95,18 @@ export default class Hand {
 		return startingText;
 	}
 
+	get cardTextValues(): string[] {
+		let values: string[] = [];
+
+		for (let i = 0; i < this.cards.length; i++) {
+			if (!this.cards[i].isFaceDown) {
+				values.push(this.cards[i].cardValueText);
+			}
+		}
+
+		return values;
+	}
+
 	// Highlight the total in the case of split hands
 	set active(bool: boolean) {
 		this.isActive = bool;

@@ -128,7 +128,7 @@ class API {
 			});
 
 			if (!res.ok) {
-				throw new Error('oops');
+				throw new Error('cannot login');
 			}
 
 			// Parse and set data from API
@@ -152,7 +152,7 @@ class API {
 			const res: Response = await window.fetch(`${this.url}/user/${id}`);
 
 			if (!res.ok) {
-				throw new Error('oops');
+				throw new Error('not logged in');
 			}
 
 			// Parse and set data from API
@@ -176,7 +176,7 @@ class API {
 
 			// Grab data from API
 			if (!res.ok) {
-				throw new Error('oops');
+				throw new Error('not logged in');
 			}
 			const data = await res.json();
 
@@ -199,7 +199,6 @@ class API {
 					// Check if user is on leaderboard
 					if (this.username === data[i].nickname) {
 						showElement(tableRow, 'highlight-user');
-						console.log('test');
 					}
 				}
 
@@ -227,7 +226,7 @@ class API {
 			const cookie = this.cookie;
 
 			if (!this.cookie) {
-				throw new Error('oops');
+				throw new Error('not logged in');
 			}
 
 			// Update in DB

@@ -9,6 +9,7 @@ import Money from './Money';
 import toast from './Toast';
 import api from './API';
 import loading from './Loading';
+import chatbot from './Chatbot';
 
 // DOM Elements
 const {
@@ -29,6 +30,8 @@ const {
 	handButtons,
 	returnBetSpan,
 	handCountSpan,
+	chatBotDiv,
+	askBtn,
 	confetti
 } = domElements;
 
@@ -114,6 +117,28 @@ export default class Game {
 				});
 			});
 		});
+		askBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+
+			// Check if enough money for chatbot
+			if (!this.money.enoughMoneyCheck(1, 10)) {
+				toast.neutralToast('Not enough money...');
+				return;
+			}
+
+			// Decrement Money
+			this.money.lose(1, 10);
+
+			// Call chatbot
+			if (this.dealerHand) {
+				return chatbot.suggestion(
+					this.dealerHand.cardTextValues[0],
+					this.currentHand,
+					!this.actionButtons.splitButton.permanentDisable,
+					!this.actionButtons.doubleButton.permanentDisable
+				);
+			}
+		});
 
 		// Login or Get User
 		api.init();
@@ -131,7 +156,7 @@ export default class Game {
 
 	async startRound() {
 		// Set Money from API
-		if (!api.money) {
+		if (api.money === null || api.money === undefined) {
 			toast.negativeToast('Something went wrong...');
 			return;
 		}
@@ -187,8 +212,9 @@ export default class Game {
 		// Activate User Hand
 		this.currentHand.active = true;
 
-		// Enable Action Buttons
+		// Enable Action Buttons & Chatbot
 		this.actionButtons.enableUserAction();
+		showElement(chatBotDiv);
 		this.checkSplitAction();
 
 		return;
@@ -281,6 +307,7 @@ export default class Game {
 			this.actionButtons.splitButton.permanentDisable = true;
 		}
 
+		chatbot.reset();
 		return this.actionButtons.enableUserAction();
 	};
 
@@ -325,6 +352,7 @@ export default class Game {
 		// Checks to see if Split action should be disabled
 		this.checkSplitAction();
 
+		chatbot.reset();
 		return this.actionButtons.enableUserAction();
 	};
 
@@ -365,8 +393,12 @@ export default class Game {
 	endPlayerTurn() {
 		this.currentHand.active = false;
 
+		//Reset Chatbot
+		chatbot.reset();
+
 		// If no more hands for the player, move on to dealer
 		if (this.playerHands.length == this.playerHandCurrentIdx + 1) {
+			hideElement(chatBotDiv);
 			this.dealerTurn();
 			return;
 		}
@@ -537,6 +569,7 @@ export default class Game {
 		hideElement(dealerDiv);
 		hideElement(playerDiv);
 		hideElement(buttonsDiv);
+		hideElement(chatBotDiv);
 		showElement(pregameDiv, 'pre-game');
 	}
 }

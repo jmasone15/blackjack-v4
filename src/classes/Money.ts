@@ -65,8 +65,12 @@ export default class Money {
 		this.updateDOM();
 	}
 
-	enoughMoneyCheck(multiply: number = 1): boolean {
-		return this.currentBet * multiply <= this.total;
+	enoughMoneyCheck(multiply: number = 1, override: number = 0): boolean {
+		if (override > 0) {
+			return override <= this.total;
+		} else {
+			return this.currentBet * multiply <= this.total;
+		}
 	}
 
 	updateDOM(buttonToUpdate?: HTMLButtonElement) {
@@ -96,8 +100,8 @@ export default class Money {
 		return this.updateDOM();
 	}
 
-	lose(multiply: number = 1) {
-		const totalLoss = this.currentBet * multiply;
+	lose(multiply: number = 1, override: number = 0) {
+		const totalLoss = override > 0 ? override : this.currentBet * multiply;
 
 		// Update memory
 		this.total -= totalLoss;

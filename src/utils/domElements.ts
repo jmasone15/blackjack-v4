@@ -9,7 +9,17 @@ class DOMElements {
 	leaderDiv = document.getElementById('leader-container') as HTMLDivElement;
 	leaderBodyDiv = document.getElementById('leader-body') as HTMLDivElement;
 	leaderCloseBtn = document.getElementById('close-leader') as HTMLButtonElement;
+	chatBotDiv = document.getElementById('chatbot') as HTMLDivElement;
+	chatBotIcon = document.getElementById('chatbot-icon') as HTMLDivElement;
+	chatBotSpinner = document.getElementById('chatbot-spinner') as HTMLDivElement;
+	chatBotBtns = document.getElementById('chatbot-buttons') as HTMLDivElement;
+	adviceDiv = document.getElementById('advice') as HTMLDivElement;
+	askBtn = document.getElementById('ask-btn') as HTMLButtonElement;
+	adviceBtn = document.getElementById('advice-btn') as HTMLButtonElement;
+	adviceText = document.getElementById('advice-text') as HTMLParagraphElement;
 	pregameDiv = document.getElementById('pregame-section') as HTMLDivElement;
+	actionParagraph = document.getElementById('action') as HTMLParagraphElement;
+	actionText = document.getElementById('action-text') as HTMLSpanElement;
 	dealerDiv = document.getElementById('dealer-section') as HTMLDivElement;
 	playerDiv = document.getElementById('player-section') as HTMLDivElement;
 	playerHandsDiv = document.getElementById('player-hands') as HTMLDivElement;

@@ -24,33 +24,33 @@ export default class Card {
 		}
 	}
 
+	get cardValueText(): string {
+		if (this.value > 10) {
+			switch (this.value) {
+				case 11:
+					return 'J';
+
+				case 12:
+					return 'Q';
+
+				case 13:
+					return 'K';
+
+				default:
+					return 'A';
+			}
+		} else {
+			return this.value.toString();
+		}
+	}
+
 	generateCardFace() {
 		if (!this.domElement) {
 			return;
 		}
 
 		let colorClass = ['♣', '♠'].includes(this.suit) ? 'black' : 'red';
-		let valueText: string;
-
-		if (this.value > 10) {
-			switch (this.value) {
-				case 11:
-					valueText = 'J';
-					break;
-				case 12:
-					valueText = 'Q';
-					break;
-				case 13:
-					valueText = 'K';
-					break;
-
-				default:
-					valueText = 'A';
-					break;
-			}
-		} else {
-			valueText = this.value.toString();
-		}
+		let valueText = this.cardValueText;
 
 		showElement(this.domElement, `card card-${colorClass}`);
 		this.domElement.innerText = `${valueText}${this.suit}`;
