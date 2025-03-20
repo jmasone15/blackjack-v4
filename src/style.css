@@ -574,6 +574,15 @@ button {
     display: none;
   }
 
+  #chatbot {
+    position: fixed;
+    bottom: 65px;
+    right: 5px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+  }
+
 }
 
 @media (max-width: 750px) {
@@ -620,5 +629,14 @@ button {
   .main-menu-btns {
     flex-direction: column;
     width: min-content;
+  }
+
+  #chatbot {
+    position: fixed;
+    bottom: 65px;
+    right: 5px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
   }
 }
