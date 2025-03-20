@@ -214,7 +214,7 @@ export default class Game {
 
 		// Enable Action Buttons & Chatbot
 		this.actionButtons.enableUserAction();
-		showElement(chatBotDiv);
+		// showElement(chatBotDiv);
 		this.checkSplitAction();
 
 		return;
