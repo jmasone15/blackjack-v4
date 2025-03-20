@@ -18,9 +18,17 @@ const {
 
 class Chatbot {
 	isLoading: boolean;
+	private apiKey: string;
+	private projectKey: string;
+	private orgKey: string;
 
 	constructor() {
+		// Please don't steal my data im just too lazy to put in backend
 		this.isLoading = false;
+		this.apiKey =
+			'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';
+		this.projectKey = 'proj_onVobhDwWzoenY7UbyL5BF3e';
+		this.orgKey = 'org-f5zgGinZ1WiI8r65ZaWJiwMM';
 
 		// Event Listeners
 		chatBotIcon.addEventListener('click', (e: Event) => {
@@ -85,10 +93,10 @@ class Chatbot {
 				{
 					method: 'POST',
 					headers: {
-						authorization: `Bearer ${import.meta.env.VITE_OPEN_AI_API_KEY}`,
+						authorization: `Bearer ${this.apiKey}`,
 						'Content-Type': 'application/json',
-						'OpenAI-Organization': `${import.meta.env.VITE_OPEN_AI_ORG_KEY}`,
-						'OpenAI-Project': `${import.meta.env.VITE_OPEN_AI_PROJECT_KEY}`
+						'OpenAI-Organization': `${this.orgKey}`,
+						'OpenAI-Project': `${this.projectKey}`
 					},
 					body: JSON.stringify({
 						model: 'gpt-4o-mini',
