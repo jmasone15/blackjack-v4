@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blackjack</title>
+  <link rel="icon" type="image/svg+xml" href="/blackjack-v4/gambling-playing-cards-svgrepo-com.svg" />
+  <link rel="stylesheet" href="style.css">
+  <script type="module" crossorigin src="/blackjack-v4/assets/index-CF7V4irG.js"></script>
+  <link rel="stylesheet" crossorigin href="/blackjack-v4/assets/index-DgNPgv4w.css">
+</head>
+
+<body>
+  <nav>
+    <h1 class="nav-title">
+      <a href="/">Blackjack</a>
+    </h1>
+    <div class="info-bar-money">
+      <span><i>Total Money:</i> <b><span id="total-money">$0</span></b> | </span>
+      <span><i>Current Bet:</i> <b><span id="current-bet">$0</span></b></span>
+      <span> | <i>Hand Count:</i> <b><span id="hand-count">1</span></b></span>
+    </div>
+  </nav>
+  <div class="game-container">
+    <div class="pre-game" id="pregame-section">
+      <h1>Blackjack</h1>
+      <h3><i>Set your bet amount and hand count. Then, click the "Start" button to start the next round.</i></h3>
+      <div class="options">
+        <div class="options-container" id="bet-container">
+          <h3><u>Set Bet Amount</u></h3>
+          <button class="button bet-btn bet-btn-active" data-value="10">$10</button>
+          <button class="button bet-btn" data-value="50">$50</button>
+          <button class="button bet-btn" data-value="100">$100</button>
+          <button class="button bet-btn" data-value="500">$500</button>
+        </div>
+        <div class="options-container">
+          <h3><u>Set Hand Count</u></h3>
+          <button class="button hand-btn hand-btn-active" data-value="1">One</button>
+          <button class="button hand-btn" data-value="2">Two</button>
+          <button class="button hand-btn" data-value="3">Three</button>
+          <button class="button hand-btn" data-value="4">Four</button>
+        </div>
+      </div>
+      <div class="main-menu-btns">
+        <button id="start-btn" class="button">Start</button>
+        <button id="leaderboard-btn" class="button">Leaderboard</button>
+      </div>
+    </div>
+    <div id="leader-container" class="d-none">
+      <h2>Leaderboard</h2>
+      <table class="leaderboard">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Username</th>
+            <th>Money</th>
+          </tr>
+        </thead>
+        <tbody id="leader-body">
+        </tbody>
+      </table>
+      <button id="close-leader">Close</button>
+    </div>
+    <section class="d-none" id="dealer-section">
+      <h2>Dealer</h2>
+    </section>
+    <div class="spacer"></div>
+    <section class="d-none" id="player-section">
+      <h2>Player</h2>
+      <div class="player-hands" id="player-hands">
+      </div>
+    </section>
+  </div>
+
+  <div id="chatbot" class="d-none">
+    <div id="chatbot-icon">💡</div>
+    <div id="advice" class="d-none">
+      <div id="chatbot-spinner" class="d-none"></div>
+      <p id="action" class="d-none">Action: <b><span id="action-text"></span></b></p>
+      <p id="advice-text">$10 to ask for advice!</p>
+      <div id="chatbot-buttons">
+        <button id="ask-btn">Ask</button>
+        <button id="advice-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="buttons" class="d-none">
+    <button class="disabled" id="hit">Hit</button>
+    <button class="disabled" id="stand">Stand</button>
+    <button class="disabled" id="split">Split</button>
+    <button class="disabled" id="double">Double</button>
+
+    <button class="d-none" id="main-menu">Main Menu</button>
+    <button class="d-none" id="next-round">Next Round</button>
+  </div>
+
+  <div id="login-modal" class="d-none">
+    <div class="modal-content">
+      <h2>Blackjack Login</h2>
+      <input type="text" id="username" placeholder="Enter your username">
+      <p id="username-error" class="d-none">Username is required and must be 0-20 alphanumeric characters.</p>
+      <button id="submit-login" class="button">Submit</button>
+    </div>
+  </div>
+
+  <div id="result-modal" class="d-none">
+    <div class="modal-content">
+      <h2 id="result-header">Round Over</h2>
+      <p><i>Total Bet: <span id="initial-bet" class="loss"></span> | Return: <span id="return-bet"
+            class="win"></span></i></p>
+      <hr>
+      <div id="round-results">
+      </div>
+      <hr>
+      <button id="close-modal">Close</button>
+    </div>
+  </div>
+
+  <div id="loading-spinner" class="d-none">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+      <p id="loading-message">Loading...</p>
+    </div>
+  </div>
+
+
+</body>
+
+</html>
