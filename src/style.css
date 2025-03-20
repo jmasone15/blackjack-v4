@@ -89,7 +89,15 @@ h3 {
   font-size: 20px;
 }
 
-#start-btn {
+.main-menu-btns {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 20px;
+}
+
+#start-btn,
+#leaderboard-btn {
   background-color: rgb(61, 61, 61);
   margin-top: 10px;
   font-size: 20px;
@@ -381,6 +389,80 @@ button {
   font-weight: bold;
 }
 
+
+.leaderboard-btn:hover {
+  background: #1565c0;
+}
+
+.leaderboard-card {
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
+  margin-top: 10vh;
+}
+
+.leaderboard {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.leaderboard th,
+.leaderboard td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.leaderboard th {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.leaderboard tr:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard tr:nth-child(1) td {
+  color: gold;
+  font-weight: bold;
+}
+
+.leaderboard tr:nth-child(2) td {
+  color: silver;
+  font-weight: bold;
+}
+
+.leaderboard tr:nth-child(3) td {
+  color: #cd7f32;
+  font-weight: bold;
+}
+
+.highlight-user {
+  background-color: rgba(255, 255, 0, 0.3);
+  font-weight: bold;
+  color: #fff;
+  border-left: 5px solid yellow;
+}
+
+#close-leader {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#close-leader:hover {
+  background: #b71c1c;
+}
+
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -391,8 +473,6 @@ button {
   }
 }
 
-
-
 @media (max-height: 800px) {
   .spacer {
     height: 0;
@@ -400,6 +480,14 @@ button {
 
   .total {
     margin: 5px;
+  }
+
+  .leaderboard-card {
+    margin-top: 5vh;
+  }
+
+  .leaderboard-card h2 {
+    display: none;
   }
 }
 
@@ -419,14 +507,6 @@ button {
     gap: 10px;
   }
 
-  .nav-links {
-    gap: 10px;
-  }
-
-  .info-bar {
-    justify-content: center;
-  }
-
   .pre-game h1 {
     font-size: 25px;
   }
@@ -435,11 +515,25 @@ button {
     font-size: 15px;
   }
 
-  .bet-btn {
+  .bet-btn,
+  .hand-btn {
     font-size: 12px !important;
   }
 
   .options-container {
     width: 20%;
+  }
+
+  .info-bar-money {
+    font-size: 12px;
+  }
+
+  .info-bar-money span:nth-child(3) {
+    display: none;
+  }
+
+  .main-menu-btns {
+    flex-direction: column;
+    width: min-content;
   }
 }

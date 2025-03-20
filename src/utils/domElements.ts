@@ -5,6 +5,10 @@ import JSConfetti from 'js-confetti';
 
 class DOMElements {
 	startBtn = document.getElementById('start-btn') as HTMLButtonElement;
+	leaderBtn = document.getElementById('leaderboard-btn') as HTMLButtonElement;
+	leaderDiv = document.getElementById('leader-container') as HTMLDivElement;
+	leaderBodyDiv = document.getElementById('leader-body') as HTMLDivElement;
+	leaderCloseBtn = document.getElementById('close-leader') as HTMLButtonElement;
 	pregameDiv = document.getElementById('pregame-section') as HTMLDivElement;
 	dealerDiv = document.getElementById('dealer-section') as HTMLDivElement;
 	playerDiv = document.getElementById('player-section') as HTMLDivElement;
@@ -40,6 +44,22 @@ class DOMElements {
 
 			this.hideElement(this.resultModal);
 			return;
+		});
+
+		this.leaderBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+
+			this.hideElement(this.pregameDiv);
+			this.showElement(this.leaderDiv, 'leaderboard-card');
+
+			return;
+		});
+
+		this.leaderCloseBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+
+			this.hideElement(this.leaderDiv);
+			this.showElement(this.pregameDiv, 'pre-game');
 		});
 
 		console.log('DOM Elements Class ready');

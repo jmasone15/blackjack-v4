@@ -2,7 +2,6 @@ import './style.css';
 import Game from './classes/Game';
 
 // TODO
-// Leaderboard
-// Stats Page placeholder
+// Chat GPT integration for suggested move
 
 new Game();

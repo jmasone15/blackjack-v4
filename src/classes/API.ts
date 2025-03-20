@@ -8,6 +8,7 @@ const {
 	usernameError,
 	loginModal,
 	totalMoneySpan,
+	leaderBodyDiv,
 	showElement,
 	hideElement
 } = domElements;
@@ -133,6 +134,9 @@ class API {
 			// Parse and set data from API
 			const data: any = await res.json();
 			this.parseAPIResponse(data);
+
+			// Populate leaderboard
+			await this.populateLeaderboard();
 		} catch (error) {
 			toast.negativeToast('Something went wrong...');
 			console.error(error);
@@ -154,6 +158,58 @@ class API {
 			// Parse and set data from API
 			const data: any = await res.json();
 			this.parseAPIResponse(data);
+
+			// Populate leaderboard
+			await this.populateLeaderboard();
+		} catch (error) {
+			toast.negativeToast('Something went wrong...');
+			console.error(error);
+		} finally {
+			await loading.setLoading(false);
+			return;
+		}
+	}
+
+	async populateLeaderboard(): Promise<void> {
+		try {
+			const res: Response = await window.fetch(`${this.url}/top-ten`);
+
+			// Grab data from API
+			if (!res.ok) {
+				throw new Error('oops');
+			}
+			const data = await res.json();
+
+			for (let i = 0; i < 10; i++) {
+				// Create HTML Elements
+				const tableRow = document.createElement('tr') as HTMLTableRowElement;
+				const rankCell = document.createElement('td') as HTMLTableCellElement;
+				const userCell = document.createElement('td') as HTMLTableCellElement;
+				const moneyCell = document.createElement('td') as HTMLTableCellElement;
+
+				// Update elements with user/placeholder data.
+				rankCell.textContent = `${i + 1}`;
+				if (!data[i]) {
+					userCell.textContent = 'N/A';
+					moneyCell.textContent = '$0';
+				} else {
+					userCell.textContent = data[i].nickname;
+					moneyCell.textContent = `$${data[i].money}`;
+
+					// Check if user is on leaderboard
+					if (this.username === data[i].nickname) {
+						showElement(tableRow, 'highlight-user');
+						console.log('test');
+					}
+				}
+
+				tableRow.appendChild(rankCell);
+				tableRow.appendChild(userCell);
+				tableRow.appendChild(moneyCell);
+				leaderBodyDiv.appendChild(tableRow);
+			}
+
+			return;
 		} catch (error) {
 			toast.negativeToast('Something went wrong...');
 			console.error(error);
