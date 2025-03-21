@@ -37,7 +37,7 @@ const {
 
 export default class Game {
 	// Deck Variables
-	deckCount: number = 1;
+	deckCount: number = 2;
 	suits: string[] = ['♥', '♦', '♣', '♠'];
 	cardValues: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 	private currentDeck: Card[] = [];
@@ -275,7 +275,7 @@ export default class Game {
 
 		// Reshuffle
 		if (this.currentDeckIdx == this.currentDeck.length) {
-			await loading.setLoading(true, 'Reshuffling...', 500);
+			await loading.setLoading(true, 'Reshuffling...', 1000);
 			this.createDeck();
 			this.currentDeckIdx = 0;
 			await loading.setLoading(false);

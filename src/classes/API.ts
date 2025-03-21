@@ -1,6 +1,7 @@
 import toast from './Toast';
 import domElements from '../utils/domElements';
 import loading from './Loading';
+import removeDOMChildren from '../utils/removeDOMChildren';
 
 const {
 	submitLoginBtn,
@@ -9,6 +10,7 @@ const {
 	loginModal,
 	totalMoneySpan,
 	leaderBodyDiv,
+	refreshBtn,
 	showElement,
 	hideElement
 } = domElements;
@@ -59,6 +61,11 @@ class API {
 				}
 			}
 		);
+
+		refreshBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+			return this.populateLeaderboard(false);
+		});
 
 		console.log('API Class ready');
 	}
@@ -177,8 +184,11 @@ class API {
 		}
 	}
 
-	async populateLeaderboard(): Promise<void> {
+	async populateLeaderboard(skipLoading: boolean = true): Promise<void> {
 		try {
+			if (!skipLoading) {
+				await loading.setLoading(true);
+			}
 			const res: Response = await window.fetch(`${this.url}/top-ten`);
 
 			// Grab data from API
@@ -186,6 +196,9 @@ class API {
 				throw new Error('not logged in');
 			}
 			const data = await res.json();
+
+			// Clear existing data
+			removeDOMChildren(leaderBodyDiv);
 
 			for (let i = 0; i < 10; i++) {
 				// Create HTML Elements

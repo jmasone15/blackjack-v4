@@ -36,6 +36,7 @@ class DOMElements {
 	totalBetSpan = document.getElementById('initial-bet') as HTMLSpanElement;
 	returnBetSpan = document.getElementById('return-bet') as HTMLSpanElement;
 	closeModalBtn = document.getElementById('close-modal') as HTMLButtonElement;
+	refreshBtn = document.getElementById('refresh-leader') as HTMLButtonElement;
 	usernameInput = document.getElementById('username') as HTMLInputElement;
 	usernameError = document.getElementById(
 		'username-error'
