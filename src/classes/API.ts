@@ -313,7 +313,7 @@ class API {
 		} finally {
 			await loading.setLoading(false);
 			hideElement(brokeSection);
-			showElement(pregameDiv);
+			showElement(pregameDiv, 'pre-game');
 			return;
 		}
 	}
