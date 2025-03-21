@@ -660,6 +660,13 @@ button {
   .main-menu-btns {
     flex-direction: column;
     width: min-content;
+    gap: 5px;
+  }
+
+  #start-btn,
+  #leaderboard-btn,
+  #more-money {
+    font-size: 15px;
   }
 
   #chatbot {
