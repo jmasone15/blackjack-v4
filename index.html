@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blackjack</title>
   <link rel="icon" type="image/svg+xml" href="/blackjack-v4/gambling-playing-cards-svgrepo-com.svg" />
-  <script type="module" crossorigin src="/blackjack-v4/assets/index-0RTbHktT.js"></script>
-  <link rel="stylesheet" crossorigin href="/blackjack-v4/assets/index-HODi4Fta.css">
+  <script type="module" crossorigin src="/blackjack-v4/assets/index-BGpZmvfw.js"></script>
+  <link rel="stylesheet" crossorigin href="/blackjack-v4/assets/index-CWtLd8BP.css">
 </head>
 
 <body>
@@ -44,6 +44,7 @@
       <div class="main-menu-btns">
         <button id="start-btn" class="button">Start</button>
         <button id="leaderboard-btn" class="button">Leaderboard</button>
+        <button id="more-money" class="d-none">I'm Broke</button>
       </div>
     </div>
     <div id="leader-container" class="d-none">
@@ -53,7 +54,7 @@
           <tr>
             <th>Rank</th>
             <th>Username</th>
-            <th>Money</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody id="leader-body">
@@ -64,6 +65,14 @@
         <button class="leader-btn" id="close-leader">Close</button>
       </div>
     </div>
+    <section id="broke-ahh" class="d-none">
+      <h2>You lost all your money lol</h2>
+      <p>Would you like a loan from the bank of Jordan?</p>
+      <div class="leader-btns">
+        <button id="no-broke" class="button">No...</button>
+        <button id="yes-broke" class="button">Pretty Please???</button>
+      </div>
+    </section>
     <section class="d-none" id="dealer-section">
       <h2>Dealer</h2>
     </section>
@@ -101,7 +110,7 @@
   <div id="login-modal" class="d-none">
     <div class="modal-content">
       <h2>Blackjack Login</h2>
-      <input type="text" id="username" placeholder="Enter your username">
+      <input type="text" id="username" placeholder="Enter your username" autocomplete="off">
       <p id="username-error" class="d-none">Username is required and must be 0-20 alphanumeric characters.</p>
       <button id="submit-login" class="button">Submit</button>
     </div>
