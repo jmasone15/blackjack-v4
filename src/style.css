@@ -97,7 +97,8 @@ h3 {
 }
 
 #start-btn,
-#leaderboard-btn {
+#leaderboard-btn,
+#more-money {
   background-color: rgb(61, 61, 61);
   margin-top: 10px;
   font-size: 20px;
@@ -554,6 +555,14 @@ button {
   background: #175806;
 }
 
+#no-broke {
+  background: #b71c1c;
+}
+
+#yes-broke {
+  background: #218109;
+}
+
 #chatbot-spinner {
   width: 20px;
   height: 20px;
@@ -562,6 +571,10 @@ button {
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: auto;
+}
+
+#broke-ahh p {
+  margin-bottom: 40px;
 }
 
 

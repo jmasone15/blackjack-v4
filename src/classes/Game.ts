@@ -32,6 +32,7 @@ const {
 	handCountSpan,
 	chatBotDiv,
 	askBtn,
+	brokeBtn,
 	confetti
 } = domElements;
 
@@ -571,5 +572,12 @@ export default class Game {
 		hideElement(buttonsDiv);
 		hideElement(chatBotDiv);
 		showElement(pregameDiv, 'pre-game');
+
+		// Is user broke?
+		if (this.money !== null && this.money.total < 10) {
+			showElement(brokeBtn, 'button');
+		}
+
+		return;
 	}
 }

@@ -37,6 +37,10 @@ class DOMElements {
 	returnBetSpan = document.getElementById('return-bet') as HTMLSpanElement;
 	closeModalBtn = document.getElementById('close-modal') as HTMLButtonElement;
 	refreshBtn = document.getElementById('refresh-leader') as HTMLButtonElement;
+	brokeBtn = document.getElementById('more-money') as HTMLButtonElement;
+	brokeSection = document.getElementById('broke-ahh') as HTMLDivElement;
+	noBrokeBtn = document.getElementById('no-broke') as HTMLButtonElement;
+	yesBrokeBtn = document.getElementById('yes-broke') as HTMLButtonElement;
 	usernameInput = document.getElementById('username') as HTMLInputElement;
 	usernameError = document.getElementById(
 		'username-error'
@@ -70,6 +74,20 @@ class DOMElements {
 			e.preventDefault();
 
 			this.hideElement(this.leaderDiv);
+			this.showElement(this.pregameDiv, 'pre-game');
+		});
+
+		this.brokeBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+
+			this.hideElement(this.pregameDiv);
+			this.showElement(this.brokeSection, 'leaderboard-card');
+		});
+
+		this.noBrokeBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+
+			this.hideElement(this.brokeSection);
 			this.showElement(this.pregameDiv, 'pre-game');
 		});
 

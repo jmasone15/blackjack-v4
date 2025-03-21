@@ -11,6 +11,10 @@ const {
 	totalMoneySpan,
 	leaderBodyDiv,
 	refreshBtn,
+	brokeBtn,
+	yesBrokeBtn,
+	brokeSection,
+	pregameDiv,
 	showElement,
 	hideElement
 } = domElements;
@@ -65,6 +69,11 @@ class API {
 		refreshBtn.addEventListener('click', (e: Event) => {
 			e.preventDefault();
 			return this.populateLeaderboard(false);
+		});
+
+		yesBrokeBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+			return this.moreMoney();
 		});
 
 		console.log('API Class ready');
@@ -122,6 +131,9 @@ class API {
 
 		// Update DOM
 		totalMoneySpan.textContent = `$${this.money}`;
+		if (this.money !== null && this.money < 10) {
+			showElement(brokeBtn, 'button');
+		}
 
 		return;
 	}
@@ -205,16 +217,16 @@ class API {
 				const tableRow = document.createElement('tr') as HTMLTableRowElement;
 				const rankCell = document.createElement('td') as HTMLTableCellElement;
 				const userCell = document.createElement('td') as HTMLTableCellElement;
-				const moneyCell = document.createElement('td') as HTMLTableCellElement;
+				const totalCell = document.createElement('td') as HTMLTableCellElement;
 
 				// Update elements with user/placeholder data.
 				rankCell.textContent = `${i + 1}`;
 				if (!data[i]) {
 					userCell.textContent = 'N/A';
-					moneyCell.textContent = '$0';
+					totalCell.textContent = '$0';
 				} else {
 					userCell.textContent = data[i].nickname;
-					moneyCell.textContent = `$${data[i].money}`;
+					totalCell.textContent = `$${data[i].total}`;
 
 					// Check if user is on leaderboard
 					if (this.username === data[i].nickname) {
@@ -224,7 +236,7 @@ class API {
 
 				tableRow.appendChild(rankCell);
 				tableRow.appendChild(userCell);
-				tableRow.appendChild(moneyCell);
+				tableRow.appendChild(totalCell);
 				leaderBodyDiv.appendChild(tableRow);
 			}
 
@@ -270,6 +282,37 @@ class API {
 			return;
 		} catch (error) {
 			toast.negativeToast('Something went wrong...');
+			console.error(error);
+		} finally {
+			await loading.setLoading(false);
+			return;
+		}
+	}
+
+	async moreMoney() {
+		try {
+			await loading.setLoading(true, "Jordan's fat pockets opening...", 2000);
+			const res: Response = await window.fetch(
+				`${this.url}/more-money/${this.cookie}`
+			);
+
+			if (!res.ok) {
+				throw new Error('not logged in');
+			}
+
+			// Refill Money
+			this.money = 1000;
+			toast.positiveToast('+ $1000');
+
+			// Update DOM
+			hideElement(brokeSection);
+			showElement(pregameDiv);
+
+			// Populate leaderboard
+			await this.populateLeaderboard();
+		} catch (error) {
+			toast.negativeToast('Something went wrong...');
+			this.deleteCookie();
 			console.error(error);
 		} finally {
 			await loading.setLoading(false);
