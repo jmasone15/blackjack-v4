@@ -304,10 +304,6 @@ class API {
 			this.money = 1000;
 			toast.positiveToast('+ $1000');
 
-			// Update DOM
-			hideElement(brokeSection);
-			showElement(pregameDiv);
-
 			// Populate leaderboard
 			await this.populateLeaderboard();
 		} catch (error) {
@@ -316,6 +312,8 @@ class API {
 			console.error(error);
 		} finally {
 			await loading.setLoading(false);
+			hideElement(brokeSection);
+			showElement(pregameDiv);
 			return;
 		}
 	}
