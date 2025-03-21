@@ -90,6 +90,11 @@ class API {
 		)}; expires=${expires.toUTCString()}; path=/; Secure; SameSite=Strict`;
 	}
 
+	deleteCookie(): void {
+		console.log('test');
+		document.cookie = `${this.cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+	}
+
 	init(): Promise<void> | void {
 		const cookie: string | null = this.cookie;
 
@@ -139,6 +144,7 @@ class API {
 			await this.populateLeaderboard();
 		} catch (error) {
 			toast.negativeToast('Something went wrong...');
+			this.deleteCookie();
 			console.error(error);
 		} finally {
 			await loading.setLoading(false);
@@ -163,6 +169,7 @@ class API {
 			await this.populateLeaderboard();
 		} catch (error) {
 			toast.negativeToast('Something went wrong...');
+			this.deleteCookie();
 			console.error(error);
 		} finally {
 			await loading.setLoading(false);
