@@ -15,6 +15,7 @@ const {
 	yesBrokeBtn,
 	brokeSection,
 	pregameDiv,
+	yourTotalSpan,
 	showElement,
 	hideElement
 } = domElements;
@@ -24,12 +25,14 @@ class API {
 	private cookieName: string;
 	username: string | null;
 	money: number | null;
+	total: number | null;
 
 	constructor() {
 		this.url = 'https://simple-api-isq7ga.fly.dev/blackjack';
 		this.cookieName = 'blackjackUserId';
 		this.username = null;
 		this.money = null;
+		this.total = null;
 
 		submitLoginBtn.addEventListener(
 			'click',
@@ -123,11 +126,12 @@ class API {
 
 	parseAPIResponse(jsonRes: any) {
 		// Parse values from API response
-		const { _id, nickname, money }: any = jsonRes;
+		const { _id, nickname, money, total }: any = jsonRes;
 
 		this.cookie = _id;
 		this.username = nickname;
 		this.money = money;
+		this.total = total;
 
 		// Update DOM
 		totalMoneySpan.textContent = `$${this.money}`;
@@ -211,6 +215,7 @@ class API {
 
 			// Clear existing data
 			removeDOMChildren(leaderBodyDiv);
+			yourTotalSpan.textContent = `$${this.total}`;
 
 			for (let i = 0; i < 10; i++) {
 				// Create HTML Elements
@@ -302,7 +307,10 @@ class API {
 
 			// Refill Money
 			this.money = 1000;
+			totalMoneySpan.textContent = `$${this.money}`;
 			toast.positiveToast('+ $1000');
+
+			// Update DOM
 
 			// Populate leaderboard
 			await this.populateLeaderboard();

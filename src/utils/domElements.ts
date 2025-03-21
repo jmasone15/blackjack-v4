@@ -41,6 +41,7 @@ class DOMElements {
 	brokeSection = document.getElementById('broke-ahh') as HTMLDivElement;
 	noBrokeBtn = document.getElementById('no-broke') as HTMLButtonElement;
 	yesBrokeBtn = document.getElementById('yes-broke') as HTMLButtonElement;
+	yourTotalSpan = document.getElementById('your-total') as HTMLSpanElement;
 	usernameInput = document.getElementById('username') as HTMLInputElement;
 	usernameError = document.getElementById(
 		'username-error'
