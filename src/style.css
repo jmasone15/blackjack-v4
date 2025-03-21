@@ -597,14 +597,6 @@ button {
     margin: 5px;
   }
 
-  .leaderboard-card {
-    margin-top: 5vh;
-  }
-
-  .leaderboard-card h2 {
-    display: none;
-  }
-
   #chatbot {
     position: fixed;
     bottom: 65px;
@@ -612,6 +604,18 @@ button {
     width: 35px;
     height: 35px;
     cursor: pointer;
+  }
+
+  .main-menu-btns {
+    flex-direction: column;
+    width: min-content;
+    gap: 5px;
+  }
+
+  #start-btn,
+  #leaderboard-btn,
+  #more-money {
+    font-size: 15px;
   }
 
 }
