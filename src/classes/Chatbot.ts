@@ -18,17 +18,9 @@ const {
 
 class Chatbot {
 	isLoading: boolean;
-	private apiKey: string;
-	private projectKey: string;
-	private orgKey: string;
 
 	constructor() {
-		// Please don't steal my data im just too lazy to put in backend
 		this.isLoading = false;
-		this.apiKey =
-			'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';
-		this.projectKey = 'proj_onVobhDwWzoenY7UbyL5BF3e';
-		this.orgKey = 'org-f5zgGinZ1WiI8r65ZaWJiwMM';
 
 		// Event Listeners
 		chatBotIcon.addEventListener('click', (e: Event) => {
@@ -80,41 +72,24 @@ class Chatbot {
 				actionArray.push('Double');
 			}
 
-			console.log(actionArray);
-
-			// Build query message and call AI API
-			const message = `Hello, if I am playing blackjack and the dealer is showing a ${dealerCardValue}. My cards are [${playerHand.cardTextValues.join(
-				', '
-			)}]. Right now, I can can take the following actions: [${actionArray.join(
-				', '
-			)}]. What is the best statistical play?\nPlease format your response formatted as so:\n{"response": "ACTION", "reasoning": "..."}`;
+			// Call AI API
 			const res: Response = await window.fetch(
-				'https://api.openai.com/v1/chat/completions',
+				`https://simple-api-isq7ga.fly.dev/blackjack/help`,
 				{
 					method: 'POST',
 					headers: {
-						authorization: `Bearer ${this.apiKey}`,
-						'Content-Type': 'application/json',
-						'OpenAI-Organization': `${this.orgKey}`,
-						'OpenAI-Project': `${this.projectKey}`
+						'content-type': 'application/json;charset=UTF-8'
 					},
 					body: JSON.stringify({
-						model: 'gpt-4o-mini',
-						messages: [
-							{
-								role: 'user',
-								content: message
-							}
-						]
+						dealerCardValue,
+						playerCardValues: playerHand.cardTextValues.join(', '),
+						actionArray: actionArray.join(', ')
 					})
 				}
 			);
 
 			// Get data from AI
-			const data = await res.json();
-			const { response, reasoning } = JSON.parse(
-				data.choices[0].message.content
-			);
+			const { response, reasoning } = await res.json();
 
 			// Update DOM
 			adviceText.textContent = reasoning;
