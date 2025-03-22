@@ -84,7 +84,7 @@ class API {
 		leaderBtn.addEventListener('click', (e: Event) => {
 			e.preventDefault();
 
-			return this.populateLeaderboard(false);
+			return this.populateLeaderboard(false, true);
 		});
 
 		console.log('API Class ready');
