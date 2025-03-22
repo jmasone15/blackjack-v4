@@ -16,6 +16,8 @@ const {
 	brokeSection,
 	pregameDiv,
 	yourTotalSpan,
+	leaderBtn,
+	leaderDiv,
 	showElement,
 	hideElement
 } = domElements;
@@ -79,6 +81,12 @@ class API {
 			return this.moreMoney();
 		});
 
+		leaderBtn.addEventListener('click', (e: Event) => {
+			e.preventDefault();
+
+			return this.populateLeaderboard(false);
+		});
+
 		console.log('API Class ready');
 	}
 
@@ -135,6 +143,7 @@ class API {
 
 		// Update DOM
 		totalMoneySpan.textContent = `$${this.money}`;
+		yourTotalSpan.textContent = `$${this.total}`;
 		if (this.money !== null && this.money < 10) {
 			showElement(brokeBtn, 'button');
 		}
@@ -200,7 +209,10 @@ class API {
 		}
 	}
 
-	async populateLeaderboard(skipLoading: boolean = true): Promise<void> {
+	async populateLeaderboard(
+		skipLoading: boolean = true,
+		fromEvent: boolean = false
+	): Promise<void> {
 		try {
 			if (!skipLoading) {
 				await loading.setLoading(true);
@@ -251,6 +263,12 @@ class API {
 			console.error(error);
 		} finally {
 			await loading.setLoading(false);
+
+			// Update DOM
+			if (fromEvent) {
+				hideElement(pregameDiv);
+				showElement(leaderDiv, 'leaderboard-card');
+			}
 			return;
 		}
 	}
@@ -281,7 +299,11 @@ class API {
 			if (!res.ok) {
 				throw new Error('oops');
 			} else {
-				this.money = money;
+				const data = await res.json();
+				this.money = data.money;
+				this.total = data.total;
+
+				yourTotalSpan.textContent = `$${this.total}`;
 			}
 
 			return;
@@ -310,8 +332,6 @@ class API {
 			totalMoneySpan.textContent = `$${this.money}`;
 			toast.positiveToast('+ $1000');
 
-			// Update DOM
-
 			// Populate leaderboard
 			await this.populateLeaderboard();
 		} catch (error) {
@@ -320,6 +340,8 @@ class API {
 			console.error(error);
 		} finally {
 			await loading.setLoading(false);
+
+			// Update DOM
 			hideElement(brokeSection);
 			showElement(pregameDiv, 'pre-game');
 			return;
