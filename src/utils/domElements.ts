@@ -62,15 +62,6 @@ class DOMElements {
 			return;
 		});
 
-		this.leaderBtn.addEventListener('click', (e: Event) => {
-			e.preventDefault();
-
-			this.hideElement(this.pregameDiv);
-			this.showElement(this.leaderDiv, 'leaderboard-card');
-
-			return;
-		});
-
 		this.leaderCloseBtn.addEventListener('click', (e: Event) => {
 			e.preventDefault();
 
